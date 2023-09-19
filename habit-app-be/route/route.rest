@@ -1,0 +1,18 @@
+GET http://localhost:9090/users
+
+###
+
+POST http://localhost:9090/users
+Content-Type: application/json
+
+{
+    "username": "sad123",
+    "email": "sad@example.com",
+    "password": "password987",
+    "habit_categories": [],
+    "challenges": [],
+    "habits": [],
+    "notes": []
+}
+
+###
