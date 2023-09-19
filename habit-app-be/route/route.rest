@@ -6,9 +6,9 @@ POST http://localhost:9090/users
 Content-Type: application/json
 
 {
-    "username": "sad123",
-    "email": "sad@example.com",
-    "password": "password987",
+    "username": "laugh123",
+    "email": "laugh@example.com",
+    "password": "passwordl987",
     "habit_categories": [],
     "challenges": [],
     "habits": [],
