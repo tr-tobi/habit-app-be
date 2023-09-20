@@ -1,12 +1,11 @@
 const express = require("express");
 require("dotenv").config();
-const mongoose = require("mongoose");
-const usersSchema = require('./models/index.ts')
-const router = express.Router()
-const crypto = require('crypto');
+var mongoose = require("mongoose");
+var usersSchema = require("./models/index.ts");
+const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
 
-const app = express();
+var app = express();
 app.use(express.json());
 app.use(router);
 
@@ -20,19 +19,18 @@ db.once("open", () => {
   console.log("connected to database");
 });
 
-const Users = mongoose.model('Users', usersSchema)
+const Users = mongoose.model("Users", usersSchema);
 
-router.get("/users", async (req: any, res: any) => {
+router.get("/api/users", async (req: any, res: any) => {
   try {
     const users = await Users.find();
-    res.json(users);
+    res.json({ users: users });
   } catch (err) {
     res.status(500).json({ msg: "error" });
   }
 });
 
-router.post("/users", async (req: any, res: any) => {
-
+router.post("/api/users", async (req: any, res: any) => {
   const user = new Users({
     username: req.body.username,
     email: req.body.email,
@@ -40,18 +38,15 @@ router.post("/users", async (req: any, res: any) => {
     habit_categories: [],
     challenges: [],
     habits: [],
-    notes: []
-}) 
-try {
-  console.log(req.body, "<<req.body")
-  console.log(user, "<<user")
-    const newUser = await user.save()
-    res.status(201).json(newUser)
-    console.log(newUser, "<<newUser")
-} catch (err: any) {
-    res.status(400).json({ msg: "error"})
-}
-})
+    notes: [],
+  });
+  try {
+    const newUser = await user.save();
+    res.status(201).json({ user: newUser });
+  } catch (err: any) {
+    res.status(400).json({ msg: "Bad Request" });
+  }
+});
 
 const { PORT = 9090 } = process.env;
 app.listen(PORT, () => {
