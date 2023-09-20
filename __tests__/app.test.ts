@@ -73,3 +73,38 @@ describe("/api/users", () => {
       });
   });
 });
+describe("/api/users/:username/habits", () => {
+  test("GET:200 sends an array of habit objects", () => {
+    return request(app)
+      .get("/api/users/user1/habits")
+      .expect(200)
+      .then((res: any) => {
+        expect(res.body.habits).toEqual(expect.any(Array));
+        expect(res.body.habits[0]).toHaveProperty("date");
+        expect(res.body.habits[0]).toHaveProperty("habit_name");
+        expect(res.body.habits[0]).toHaveProperty("habit_category");
+        expect(res.body.habits[0]).toHaveProperty("description");
+        expect(res.body.habits[0]).toHaveProperty("occurrence");
+        });
+      });
+    test("POST: 201 obj contains correct properties for post request", () => {
+        const newHabit: object = {
+          habit_name: "Drawing Journal",
+          email: "test124@gmail.com",
+          password: "6789",
+        };
+        return request(app)
+          .post("/api/users/user1/habits")
+          .send(newHabit)
+          .expect(201)
+          .then((res: any) => {
+            console.log(res.body.habit, "hello")
+            expect(res.body.habit).toHaveProperty("habit_categories");
+            expect(res.body.habit).toHaveProperty("date");
+            expect(res.body.habit).toHaveProperty("habit_name");
+            expect(res.body.habit).toHaveProperty("habit_category");
+            expect(res.body.habit).toHaveProperty("description");
+            expect(res.body.habit).toHaveProperty("occurrence");
+          });
+      });
+  });

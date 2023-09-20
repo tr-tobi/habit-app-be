@@ -1,8 +1,27 @@
-GET http://localhost:9090/users
+GET http://localhost:9090/api/users
 
 ###
 
-POST http://localhost:9090/users
+GET http://localhost:9090/api/users/user2/habits
+
+###
+
+POST http://localhost:9090/api/users
+Content-Type: application/json
+
+{
+    "username": "laugh123",
+    "email": "laugh@example.com",
+    "password": "passwordl987",
+    "habit_categories": [],
+    "challenges": [],
+    "habits": [],
+    "notes": []
+}
+
+###
+
+POST http://localhost:9090/api/users/user2/habits
 Content-Type: application/json
 
 {

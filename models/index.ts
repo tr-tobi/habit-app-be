@@ -38,4 +38,32 @@ var usersSchema = new mongoose.Schema({
   },
 });
 
-module.exports = usersSchema;
+var habitsSchema = new mongoose.Schema({
+  habit_categories: [],
+  challenges: [],
+  habits: [],
+  notes: [],
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  habit_name: {
+    type: String,
+    required: true,
+  },
+  habit_category: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  occurrence: [
+    {
+      type: String,
+      required: true,
+}]
+})
+
+module.exports = usersSchema, habitsSchema;
