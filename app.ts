@@ -5,6 +5,7 @@ var usersSchema = require("./models/index.ts");
 const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
 import getUser from "./controllers/index";
+const bcrypt = require("bcrypt");
 
 var app = express();
 app.use(express.json());
@@ -31,17 +32,23 @@ router.get("/api/users", async (req: any, res: any) => {
   }
 });
 
+const saltRounds = 10;
+
 router.post("/api/users", async (req: any, res: any) => {
-  const user = new Users({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    habit_categories: [],
-    challenges: [],
-    habits: [],
-    notes: [],
-  });
+  const { username, email, password } = req.body;
+
   try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const user = new Users({
+      username,
+      email,
+      password: hashedPassword,
+      habit_categories: [],
+      challenges: [],
+      habits: [],
+      notes: [],
+    });
+
     const newUser = await user.save();
     res.status(201).json({ user: newUser });
   } catch (err: any) {
@@ -50,13 +57,13 @@ router.post("/api/users", async (req: any, res: any) => {
 });
 
 router.get("/api/users/:username", getUser, (req: any, res: any) => {
-  //bcrypt compare to check password
   res.send({ user: res.user });
 });
 
 router.patch("/api/users/:username", getUser, async (req: any, res: any) => {
   if (req.body.password != null || req.body.password != undefined) {
-    res.user[0].password = req.body.password;
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+    res.user[0].password = hashedPassword;
     try {
       await res.user[0].save();
       res.json(res.user[0]);

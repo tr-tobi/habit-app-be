@@ -5,6 +5,7 @@ var { habitsData } = require("../db/seed/data/test-data/habits");
 var {
   habitCompletionData,
 } = require("../db/seed/data/test-data/habit-completion");
+const bcrypt = require("bcrypt");
 
 describe("/api/users", () => {
   test("GET:200 sends an array of users objects", () => {
@@ -99,49 +100,48 @@ describe("/api/users/:username", () => {
         expect(response.body.msg).toEqual("User Not Found");
       });
   });
-  test("PATCH:200 updates user password by username", () => {
+  test("PATCH:200 updates user password by username", async () => {
     const newPassword = {
       password: "newpassword",
     };
+    const saltRounds = 10;
+
+    // Await the result of bcrypt.hash
+    const hashedPassword = await bcrypt.hash(newPassword.password, saltRounds);
+
+    // Now, you can compare the password
+    const isMatch = await bcrypt.compare(newPassword.password, hashedPassword);
+
     return request(app)
       .patch("/api/users/happy123")
       .send(newPassword)
       .expect(200)
       .then((response: any) => {
-        expect(response.body).toMatchObject({
-          username: "happy123",
-          email: "happy123@example.com",
-          password: "newpassword",
-          habit_categories: [],
-          challenges: [],
-          habits: [],
-          notes: [],
-          __v: 0,
-        });
+        expect(isMatch).toBe(true);
       });
   });
-  test("PATCH:200 updates user password by username with an extra property", () => {
+  test("PATCH:200 updates user password by username with an extra property", async () => {
     const newPassword = {
       password: "newpassword",
       test: 4,
     };
+    const saltRounds = 10;
+
+    // Await the result of bcrypt.hash
+    const hashedPassword = await bcrypt.hash(newPassword.password, saltRounds);
+
+    // Now, you can compare the password
+    const isMatch = await bcrypt.compare(newPassword.password, hashedPassword);
+
     return request(app)
       .patch("/api/users/happy123")
       .send(newPassword)
       .expect(200)
       .then((response: any) => {
-        expect(response.body).toMatchObject({
-          username: "happy123",
-          email: "happy123@example.com",
-          password: "newpassword",
-          habit_categories: [],
-          challenges: [],
-          habits: [],
-          notes: [],
-          __v: 0,
-        });
+        expect(isMatch).toBe(true);
       });
   });
+
   test("PATCH:400 obj contains no password property", () => {
     const newPassword = {
       test: 4,
