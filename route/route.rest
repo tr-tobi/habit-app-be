@@ -2,10 +2,6 @@ GET http://localhost:9090/api/users
 
 ###
 
-GET http://localhost:9090/api/users/user2/habits
-
-###
-
 POST http://localhost:9090/api/users
 Content-Type: application/json
 
@@ -21,17 +17,21 @@ Content-Type: application/json
 
 ###
 
+
+GET http://localhost:9090/api/users/user2/habits
+
+###
+
 POST http://localhost:9090/api/users/user2/habits
 Content-Type: application/json
 
 {
-    "username": "laugh123",
-    "email": "laugh@example.com",
-    "password": "passwordl987",
-    "habit_categories": [],
-    "challenges": [],
-    "habits": [],
-    "notes": []
+    "date": "2023-09-19",
+    "habit_name": "Morning Run",
+    "habit_category": "Fitness",
+    "description": "Go for a 30-minute run every morning.",
+    "occurrence": ["Monday", "Wednesday", "Friday"]
+
 }
 
 ###
