@@ -73,3 +73,113 @@ describe("/api/users", () => {
       });
   });
 });
+
+describe("/api/users/:username", () => {
+  test("GET:200 sends a user object for a user present in the api", () => {
+    return request(app)
+      .get("/api/users/user2")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.user[0]).toEqual({
+          username: "user2",
+          email: "user2@example.com",
+          password: "password2",
+          habit_categories: ["Mindfulness", "Coding", "Cooking"],
+          challenges: ["Daily Meditation Challenge"],
+          habits: ["h2", "h4"],
+          notes: [],
+        });
+      });
+  });
+  test("GET:404 sends a bad request message for non-existant username", () => {
+    return request(app)
+      .get("/api/users/banana")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+  test("PATCH:200 updates user password by username", () => {
+    const newPassword = {
+      password: "newpassword",
+    };
+    return request(app)
+      .patch("/api/users/happy123")
+      .send(newPassword)
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body).toMatchObject({
+          username: "happy123",
+          email: "happy123@example.com",
+          password: "newpassword",
+          habit_categories: [],
+          challenges: [],
+          habits: [],
+          notes: [],
+          __v: 0,
+        });
+      });
+  });
+  test("PATCH:200 updates user password by username with an extra property", () => {
+    const newPassword = {
+      password: "newpassword",
+      test: 4,
+    };
+    return request(app)
+      .patch("/api/users/happy123")
+      .send(newPassword)
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body).toMatchObject({
+          username: "happy123",
+          email: "happy123@example.com",
+          password: "newpassword",
+          habit_categories: [],
+          challenges: [],
+          habits: [],
+          notes: [],
+          __v: 0,
+        });
+      });
+  });
+  test("PATCH:400 obj contains no password property", () => {
+    const newPassword = {
+      test: 4,
+    };
+    return request(app)
+      .patch("/api/users/happy123")
+      .send(newPassword)
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("No password entered");
+      });
+  });
+  test("Patch:404 sends an appropriate error message when given a valid but non-existent id with valid password", () => {
+    const newPassword = {
+      password: "hello",
+    };
+    return request(app)
+      .patch("/api/users/djkfnsf")
+      .send(newPassword)
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("User Not Found");
+      });
+  });
+  test("DELETE:200 deletes the specified user by username", () => {
+    return request(app)
+      .delete("/api/users/test123")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("User Deleted");
+      });
+  });
+  test("DELETE:400 responds with an appropriate error message when given a non existant username", () => {
+    return request(app)
+      .delete("/api/users/ewuieh")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("User Not Found");
+      });
+  });
+});

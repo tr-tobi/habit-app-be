@@ -4,6 +4,7 @@ var mongoose = require("mongoose");
 var usersSchema = require("./models/index.ts");
 const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
+import getUser from "./controllers/index";
 
 var app = express();
 app.use(express.json());
@@ -45,6 +46,34 @@ router.post("/api/users", async (req: any, res: any) => {
     res.status(201).json({ user: newUser });
   } catch (err: any) {
     res.status(400).json({ msg: "Bad Request" });
+  }
+});
+
+router.get("/api/users/:username", getUser, (req: any, res: any) => {
+  //bcrypt compare to check password
+  res.send({ user: res.user });
+});
+
+router.patch("/api/users/:username", getUser, async (req: any, res: any) => {
+  if (req.body.password != null || req.body.password != undefined) {
+    res.user[0].password = req.body.password;
+    try {
+      await res.user[0].save();
+      res.json(res.user[0]);
+    } catch (err: any) {
+      res.status(500).json({ msg: "Error saving user data" });
+    }
+  } else {
+    res.status(400).json({ msg: "No password entered" });
+  }
+});
+
+router.delete("/api/users/:username", getUser, async (req: any, res: any) => {
+  try {
+    await Users.deleteOne({ username: res.user });
+    res.json({ msg: "User Deleted" });
+  } catch (err: any) {
+    res.status(500).json({ msg: "Error deleting user" });
   }
 });
 
