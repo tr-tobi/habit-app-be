@@ -28,7 +28,6 @@ describe("/api/users", () => {
         });
       });
   });
-
   test("POST: 201 obj contains correct properties for post request", () => {
     const newUser: object = {
       username: "test123",
@@ -141,7 +140,6 @@ describe("/api/users/:username", () => {
         expect(isMatch).toBe(true);
       });
   });
-
   test("PATCH:400 obj contains no password property", () => {
     const newPassword = {
       test: 4,
@@ -182,4 +180,38 @@ describe("/api/users/:username", () => {
         expect(response.body.msg).toBe("User Not Found");
       });
   });
+});
+
+describe.only("/api/categories/:username", () => {
+  test("GET:200 sends an array of categories", () => {
+    return request(app)
+      .get("/api/categories/user1")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.categories).toEqual([
+          "Health",
+          "Fitness",
+          "Productivity",
+        ]);
+      });
+  });
+  test("GET:404 sends an empty array", () => {
+    return request(app)
+      .get("/api/categories/user11")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("User has no categories");
+      });
+  });
+  test("POST:201 request contains a new category", () => {
+    return request(app)
+      .post("/api/categories/user10")
+      .send({ newCategory: "testCategory" })
+      .expect(201)
+      .then((response: any) => {
+        expect(response.body).toEqual(["Fitness","Exercise","testCategory"]);
+      });
+  });
+  test.todo("POST:400 request contains an empty category");
+  test.todo("POST:400 request contains an existing category");
 });
