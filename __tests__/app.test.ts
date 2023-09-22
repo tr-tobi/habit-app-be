@@ -183,16 +183,35 @@ describe("/api/users/:username", () => {
 });
 
 describe.only("/api/categories/:username", () => {
-  test("GET:200 sends an array of categories",()=>{
+  test("GET:200 sends an array of categories", () => {
     return request(app)
       .get("/api/categories/user1")
       .expect(200)
       .then((response: any) => {
-        console.log(response)
+        expect(response.body.categories).toEqual([
+          "Health",
+          "Fitness",
+          "Productivity",
+        ]);
       });
   });
-  test("GET:404 sends an empty array");
-  test("POST:201 request contains a new category");
-  test("POST:400 request contains an empty category");
-  test("POST:400 request contains an existing category");
-}); 
+  test("GET:404 sends an empty array", () => {
+    return request(app)
+      .get("/api/categories/user11")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("User has no categories");
+      });
+  });
+  test("POST:201 request contains a new category", () => {
+    return request(app)
+      .post("/api/categories/user10")
+      .send({ newCategory: "testCategory" })
+      .expect(201)
+      .then((response: any) => {
+        expect(response.body).toEqual(["Fitness","Exercise","testCategory"]);
+      });
+  });
+  test.todo("POST:400 request contains an empty category");
+  test.todo("POST:400 request contains an existing category");
+});

@@ -5,8 +5,7 @@ var usersSchema = require("./models/index.ts");
 const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
 import getUser from "./controllers/index";
-import getCategories from "./controllers/index";
-import postCategory from "./controllers/index";
+const { getCategories, postCategory } = require("./controllers/categories");
 const bcrypt = require("bcrypt");
 
 var app = express();
