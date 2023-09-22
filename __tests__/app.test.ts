@@ -122,3 +122,47 @@ describe("/api/users/:username/habits", () => {
       });
   });
 });
+describe("/api/users/:username/habits/:_id", () => {
+  test("PATCH:201 updates a habit by id", () => {
+    const newHabit: object = {
+      habit_name: "Sleep",
+      habit_category: "Mindfulness",
+      description: "Sleep every evening.",
+      occurrence: ["Weekly"],
+    };
+    return request(app)
+      .patch("/api/users/user2/habits/650c56c57225217d3baf10a7")
+      .send(newHabit)
+      .expect(201)
+      .then((res: any) => {
+        console.log(res)
+        expect(res.body.habit).toEqual({
+          _id: '650c56c57225217d3baf10a7',
+          date: '2023-09-19T00:00:00.000Z',
+          habit_name: 'Sleep',
+          habit_category: 'Mindfulness',
+          description: 'Sleep every evening.',
+          occurrence: ['Weekly'],
+          __v: 1
+        })    
+  })
+})
+test("PATCH:400 sends an appropriate error message when given an invalid id", () => {
+  return request(app)
+    .patch("/api/users/user2/habits/invalidid")
+    .send({ occurrence: ["Daily"]})
+    .expect(400)
+    .then((res: any) => {
+      expect(res.body.msg).toBe("Bad Request");
+    });
+});
+test("PATCH:404 sends an appropriate error message when given a valid but non-existent id", () => {
+  return request(app)
+    .patch("/api/users/user2/habits/650c2a6958e406e373639780")
+    .send({ occurrence: ["Daily"]})
+    .expect(404)
+    .then((res: any) => {
+      expect(res.body.msg).toBe("Habit not found");
+    });
+});
+});
