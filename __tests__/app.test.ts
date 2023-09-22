@@ -28,7 +28,6 @@ describe("/api/users", () => {
         });
       });
   });
-
   test("POST: 201 obj contains correct properties for post request", () => {
     const newUser: object = {
       username: "test123",
@@ -141,7 +140,6 @@ describe("/api/users/:username", () => {
         expect(isMatch).toBe(true);
       });
   });
-
   test("PATCH:400 obj contains no password property", () => {
     const newPassword = {
       test: 4,
@@ -183,3 +181,18 @@ describe("/api/users/:username", () => {
       });
   });
 });
+
+describe.only("/api/categories/:username", () => {
+  test("GET:200 sends an array of categories",()=>{
+    return request(app)
+      .get("/api/categories/user1")
+      .expect(200)
+      .then((response: any) => {
+        console.log(response)
+      });
+  });
+  test("GET:404 sends an empty array");
+  test("POST:201 request contains a new category");
+  test("POST:400 request contains an empty category");
+  test("POST:400 request contains an existing category");
+}); 

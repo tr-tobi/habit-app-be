@@ -5,6 +5,8 @@ var usersSchema = require("./models/index.ts");
 const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
 import getUser from "./controllers/index";
+import getCategories from "./controllers/index";
+import postCategory from "./controllers/index";
 const bcrypt = require("bcrypt");
 
 var app = express();
@@ -83,6 +85,10 @@ router.delete("/api/users/:username", getUser, async (req: any, res: any) => {
     res.status(500).json({ msg: "Error deleting user" });
   }
 });
+
+router.get("/api/categories/:username", getCategories);
+
+router.post("/api/categories/:username", postCategory);
 
 const { PORT = 9090 } = process.env;
 app.listen(PORT, () => {
