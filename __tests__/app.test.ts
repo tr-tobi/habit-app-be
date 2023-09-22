@@ -85,29 +85,29 @@ describe("/api/users/:username/habits", () => {
         expect(res.body.habits[0]).toHaveProperty("habit_category");
         expect(res.body.habits[0]).toHaveProperty("description");
         expect(res.body.habits[0]).toHaveProperty("occurrence");
-        });
-      });
-      
-  test("POST:201 inserts a new habit to the db and sends the new habit to the client", () => {
-        const newHabit: object = {
-          habit_name: "Paint",
-          habit_category: "Mindfulness",
-          description: "Paint every evening.",
-          occurrence: ["Daily"]
-        };
-        return request(app)
-          .post("/api/users/user1/habits")
-          .send(newHabit)
-          .expect(201)
-          .then((res: any) => {
-            expect(res.body.habit).toHaveProperty("date");
-            expect(res.body.habit).toHaveProperty("habit_name");
-            expect(res.body.habit).toHaveProperty("habit_category");
-            expect(res.body.habit).toHaveProperty("description");
-            expect(res.body.habit).toHaveProperty("occurrence");
-          });
       });
   });
+
+  test("POST:201 inserts a new habit to the db and sends the new habit to the client", () => {
+    const newHabit: object = {
+      habit_name: "Paint",
+      habit_category: "Mindfulness",
+      description: "Paint every evening.",
+      occurrence: ["Daily"],
+    };
+    return request(app)
+      .post("/api/users/user1/habits")
+      .send(newHabit)
+      .expect(201)
+      .then((res: any) => {
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit).toHaveProperty("habit_name");
+        expect(res.body.habit).toHaveProperty("habit_category");
+        expect(res.body.habit).toHaveProperty("description");
+        expect(res.body.habit).toHaveProperty("occurrence");
+      });
+  });
+
   test("POST:400 sends an appropriate error message when given a bad habit (missing properties: habit_name and occurence )", () => {
     const newHabit: object = {
       habit_category: "Mindfulness",
@@ -118,7 +118,7 @@ describe("/api/users/:username/habits", () => {
       .send(newHabit)
       .expect(400)
       .then((res: any) => {
-        console.log(res)
-        expect(res.body.msg).toBe('Bad Request');
+        expect(res.body.msg).toBe("Bad Request");
       });
   });
+});
