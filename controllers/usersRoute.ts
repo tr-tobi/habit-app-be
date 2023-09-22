@@ -22,6 +22,7 @@ exports.postUser = async (req: any, res: any) => {
     }
 
     const user = new Users({
+      _id: new mongoose.Types.ObjectId(),
       username,
       email,
       password: password,
@@ -84,11 +85,20 @@ exports.postUserAuth = (req: any, res: any) => {
 
 exports.patchUser = async (req: any, res: any) => {
   if (req.body.password != null || req.body.password != undefined) {
-    res.user[0].password = req.body.password;
+    const { username } = req.params;
     try {
-      await res.user[0].save();
-      res.json(res.user[0]);
-    } catch (err: any) {
+      const existingUser = await Users.findOne({ username });
+
+      if (!existingUser) {
+        return res.status(404).json({ msg: "User not found" });
+      }
+
+      existingUser.password = req.body.password;
+      const updatedUser = await existingUser.save();
+
+      res.json(updatedUser);
+    } catch (err) {
+      console.error(err);
       res.status(500).json({ msg: "Error saving user data" });
     }
   } else {

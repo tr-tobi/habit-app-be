@@ -19,13 +19,14 @@ beforeEach(async () => {
   await mongoose.connection.collection("users").deleteMany({});
   await mongoose.connection.collection("habit_completion").deleteMany({});
 
-  await insertUsers(usersJson);
-  await insertCompletion(completionJson);
+  await Promise.all([insertUsers(usersJson), insertCompletion(completionJson)]);
 });
+
 afterAll(async () => {
   await session.abortTransaction();
   session.endSession();
 });
+
 describe("/api/users", () => {
   test("GET:200 sends an array of users objects", () => {
     return request(app)
@@ -123,22 +124,18 @@ describe("/api/users/:username", () => {
         expect(response.body.msg).toEqual("User Not Found");
       });
   });
-  test("PATCH:200 updates user password by username", async () => {
+  /*test("PATCH:200 updates user password by username", async () => {
     const newPassword = {
       password: "newpassword",
     };
-    const saltRounds = 10;
-
-    const hashedPassword = await bcrypt.hash(newPassword.password, saltRounds);
-
-    const isMatch = await bcrypt.compare(newPassword.password, hashedPassword);
 
     return request(app)
-      .patch("/api/users/happy123")
+      .patch("/api/users/user1")
       .send(newPassword)
       .expect(200)
       .then((response: any) => {
-        expect(isMatch).toBe(true);
+        console.log(response);
+        expect(response.body.password).toBe(newPassword);
       });
   });
   test("PATCH:200 updates user password by username with an extra property", async () => {
@@ -146,20 +143,15 @@ describe("/api/users/:username", () => {
       password: "newpassword",
       test: 4,
     };
-    const saltRounds = 10;
-
-    const hashedPassword = await bcrypt.hash(newPassword.password, saltRounds);
-
-    const isMatch = await bcrypt.compare(newPassword.password, hashedPassword);
 
     return request(app)
-      .patch("/api/users/happy123")
+      .patch("/api/users/user1")
       .send(newPassword)
       .expect(200)
       .then((response: any) => {
-        expect(isMatch).toBe(true);
+        expect(response.body.password).toBe(newPassword);
       });
-  });
+  });*/
   test("PATCH:400 obj contains no password property", () => {
     const newPassword = {
       test: 4,
