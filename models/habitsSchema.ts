@@ -28,8 +28,8 @@ var habitsSchema = new mongoose.Schema({
     {
       type: String,
       required: true,
-}]
-})
+    },
+  ],
+});
 
 module.exports = habitsSchema;
-

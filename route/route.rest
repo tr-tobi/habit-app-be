@@ -35,3 +35,18 @@ Content-Type: application/json
 }
 
 ###
+
+PATCH http://localhost:9090/api/users/user2/habits/650c2a6958e406e373639788
+Content-Type: application/json
+
+{   
+
+    "habit_name": "Revise for exam",
+    "habit_category": "Reading",
+    "description": "Read daily."
+
+}
+
+
+
+###

@@ -4,12 +4,11 @@ var mongoose = require("mongoose");
 var router = express.Router();
 const { getAllHabits } = require('./controllers/habitsRoute')
 const { postHabit } = require('./controllers/habitsRoute')
+const { patchHabit } = require('./controllers/habitsRoute')
 const { getAllUsers } = require('./controllers/usersRoute')
 const { postUser } = require('./controllers/usersRoute')
 
-
 mongoose.connect(process.env.DATABASE_URL);
-const habitsRoute = require("./controllers/habitsRoute");
 
 var app = express();
 app.use(express.json());
@@ -34,6 +33,9 @@ getAllHabits)
 
 router.post("/api/users/:username/habits", 
 postHabit)
+
+router.patch("/api/users/:username/habits/:_id", 
+patchHabit)
 
 const { PORT = 9090 } = process.env;
 app.listen(PORT, () => {
