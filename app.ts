@@ -4,8 +4,22 @@ var mongoose = require("mongoose");
 var usersSchema = require("./models/index.ts");
 const router = express.Router();
 mongoose.connect(process.env.DATABASE_URL);
-import getUser from "./controllers/index";
-const bcrypt = require("bcrypt");
+const {
+  getCompletionByDate,
+  completionRes,
+  postCompletion,
+  patchCompletion,
+} = require("./controllers/habitCompletionRoute");
+const {
+  getUser,
+  getAllUsers,
+  postUser,
+  getUserResponse,
+  postUserAuth,
+  patchUser,
+  deleteUser,
+} = require("./controllers/usersRoute");
+var completionSchema = require("./models/habit-completion");
 
 var app = express();
 app.use(express.json());
@@ -21,68 +35,27 @@ db.once("open", () => {
   console.log("connected to database");
 });
 
-const Users = mongoose.model("Users", usersSchema);
+router.get("/api/users", getAllUsers);
 
-router.get("/api/users", async (req: any, res: any) => {
-  try {
-    const users = await Users.find();
-    res.json({ users: users });
-  } catch (err) {
-    res.status(500).json({ msg: "error" });
-  }
-});
+router.post("/api/users", postUser);
 
-const saltRounds = 10;
+router.get("/api/users/:username", getUser, getUserResponse);
 
-router.post("/api/users", async (req: any, res: any) => {
-  const { username, email, password } = req.body;
+router.post("/api/auth/:username", getUser, postUserAuth);
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const user = new Users({
-      username,
-      email,
-      password: hashedPassword,
-      habit_categories: [],
-      challenges: [],
-      habits: [],
-      notes: [],
-    });
+router.patch("/api/users/:username", getUser, patchUser);
 
-    const newUser = await user.save();
-    res.status(201).json({ user: newUser });
-  } catch (err: any) {
-    res.status(400).json({ msg: "Bad Request" });
-  }
-});
+router.delete("/api/users/:username", getUser, deleteUser);
 
-router.get("/api/users/:username", getUser, (req: any, res: any) => {
-  res.send({ user: res.user });
-});
+router.get(
+  "/api/users/:username/habit_completion/:date",
+  getCompletionByDate,
+  completionRes
+);
 
-router.patch("/api/users/:username", getUser, async (req: any, res: any) => {
-  if (req.body.password != null || req.body.password != undefined) {
-    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
-    res.user[0].password = hashedPassword;
-    try {
-      await res.user[0].save();
-      res.json(res.user[0]);
-    } catch (err: any) {
-      res.status(500).json({ msg: "Error saving user data" });
-    }
-  } else {
-    res.status(400).json({ msg: "No password entered" });
-  }
-});
+router.post("/api/users/:username/habit_completion", getUser, postCompletion);
 
-router.delete("/api/users/:username", getUser, async (req: any, res: any) => {
-  try {
-    await Users.deleteOne({ username: res.user });
-    res.json({ msg: "User Deleted" });
-  } catch (err: any) {
-    res.status(500).json({ msg: "Error deleting user" });
-  }
-});
+router.patch("/api/users/:username/habit_completion", getUser, patchCompletion);
 
 const { PORT = 9090 } = process.env;
 app.listen(PORT, () => {
