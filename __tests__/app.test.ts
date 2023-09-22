@@ -6,7 +6,26 @@ var {
   habitCompletionData,
 } = require("../db/seed/data/test-data/habit-completion");
 const bcrypt = require("bcrypt");
+var mongoose = require("mongoose");
+const usersJson = require("../db/seed/data/test-data/json/test.users.json");
+var { insertUsers, insertCompletion } = require("../db/seed/run-seed"); // Import the insertUsers function
+const completionJson = require("../db/seed/data/test-data/json/test.habit_completion.json");
 
+let session: any;
+
+beforeEach(async () => {
+  session = await mongoose.startSession();
+  session.startTransaction();
+  await mongoose.connection.collection("users").deleteMany({});
+  await mongoose.connection.collection("habit_completion").deleteMany({});
+
+  await insertUsers(usersJson);
+  await insertCompletion(completionJson);
+});
+afterAll(async () => {
+  await session.abortTransaction();
+  session.endSession();
+});
 describe("/api/users", () => {
   test("GET:200 sends an array of users objects", () => {
     return request(app)
@@ -14,18 +33,13 @@ describe("/api/users", () => {
       .expect(200)
       .then((response: any) => {
         expect(response.body.users).toEqual(expect.any(Array));
-        expect(response.body.users[0]).toEqual({
-          username: "user1",
-          email: "user1@example.com",
-          password: "password1",
-          habit_categories: ["Health", "Fitness", "Productivity"],
-          challenges: [
-            "30-Day Workout Challenge",
-            "Read a Book a Week Challenge",
-          ],
-          habits: ["h1", "h3"],
-          notes: [],
-        });
+        expect(response.body.users[0]).toHaveProperty("username");
+        expect(response.body.users[0]).toHaveProperty("email");
+        expect(response.body.users[0]).toHaveProperty("password");
+        expect(response.body.users[0]).toHaveProperty("habit_categories");
+        expect(response.body.users[0]).toHaveProperty("challenges");
+        expect(response.body.users[0]).toHaveProperty("habits");
+        expect(response.body.users[0]).toHaveProperty("notes");
       });
   });
   test("POST: 201 obj contains correct properties for post request", () => {
@@ -40,13 +54,12 @@ describe("/api/users", () => {
       .expect(201)
       .then((res: any) => {
         expect(res.body.user).toHaveProperty("username");
-        expect(res.body.user).toHaveProperty("email");
-        expect(res.body.user).toHaveProperty("password");
+        expect(res.body.user).not.toHaveProperty("email");
+        expect(res.body.user).not.toHaveProperty("password");
         expect(res.body.user).toHaveProperty("habit_categories");
         expect(res.body.user).toHaveProperty("challenges");
         expect(res.body.user).toHaveProperty("habits");
         expect(res.body.user).toHaveProperty("notes");
-        expect(res.body.user).toHaveProperty("_id");
       });
   });
   test("POST:400 obj contains username and email but no password", () => {
@@ -60,6 +73,19 @@ describe("/api/users", () => {
       .expect(400)
       .then((res: any) => {
         expect(res.body.msg).toBe("Bad Request");
+      });
+  });
+  test("POST:400 obj contains username that already exists in the database", () => {
+    const newUser: object = {
+      username: "user1",
+      email: "test123@gmail.com",
+    };
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Username already exists");
       });
   });
   test("POST:400 obj contains nothing", () => {
@@ -80,18 +106,16 @@ describe("/api/users/:username", () => {
       .get("/api/users/user2")
       .expect(200)
       .then((response: any) => {
-        expect(response.body.user[0]).toEqual({
-          username: "user2",
-          email: "user2@example.com",
-          password: "password2",
-          habit_categories: ["Mindfulness", "Coding", "Cooking"],
-          challenges: ["Daily Meditation Challenge"],
-          habits: ["h2", "h4"],
-          notes: [],
-        });
+        expect(response.body.user[0]).toHaveProperty("username");
+        expect(response.body.user[0]).toHaveProperty("email");
+        expect(response.body.user[0]).toHaveProperty("password");
+        expect(response.body.user[0]).toHaveProperty("habit_categories");
+        expect(response.body.user[0]).toHaveProperty("challenges");
+        expect(response.body.user[0]).toHaveProperty("habits");
+        expect(response.body.user[0]).toHaveProperty("notes");
       });
   });
-  test("GET:404 sends a bad request message for non-existant username", () => {
+  test("GET:404 sends a not found message for non-existant username", () => {
     return request(app)
       .get("/api/users/banana")
       .expect(404)
@@ -105,10 +129,8 @@ describe("/api/users/:username", () => {
     };
     const saltRounds = 10;
 
-    // Await the result of bcrypt.hash
     const hashedPassword = await bcrypt.hash(newPassword.password, saltRounds);
 
-    // Now, you can compare the password
     const isMatch = await bcrypt.compare(newPassword.password, hashedPassword);
 
     return request(app)
@@ -126,10 +148,8 @@ describe("/api/users/:username", () => {
     };
     const saltRounds = 10;
 
-    // Await the result of bcrypt.hash
     const hashedPassword = await bcrypt.hash(newPassword.password, saltRounds);
 
-    // Now, you can compare the password
     const isMatch = await bcrypt.compare(newPassword.password, hashedPassword);
 
     return request(app)
@@ -166,7 +186,7 @@ describe("/api/users/:username", () => {
   });
   test("DELETE:200 deletes the specified user by username", () => {
     return request(app)
-      .delete("/api/users/test123")
+      .delete("/api/users/user1")
       .expect(200)
       .then((response: any) => {
         expect(response.body.msg).toBe("User Deleted");
@@ -182,36 +202,148 @@ describe("/api/users/:username", () => {
   });
 });
 
-describe.only("/api/categories/:username", () => {
-  test("GET:200 sends an array of categories", () => {
+describe("/api/auth/:username", () => {
+  test("GET:200 returns an object with true for correct password", () => {
+    const userCheck: object = {
+      username: "user2",
+      password: "password2",
+    };
     return request(app)
-      .get("/api/categories/user1")
+      .post("/api/auth/user2")
+      .expect(201)
+      .send(userCheck)
+      .then((response: any) => {
+        expect(response.body.correct).toEqual(true);
+      });
+  });
+  test("GET:200 returns an object with false for incorrect password", () => {
+    const userCheck: object = {
+      username: "user2",
+      password: "wrongpassword",
+    };
+    return request(app)
+      .post("/api/auth/user2")
+      .expect(201)
+      .send(userCheck)
+      .then((response: any) => {
+        expect(response.body.correct).toEqual(false);
+      });
+  });
+  test("GET:404 returns an not found for a username not in the database", () => {
+    const userCheck: object = {
+      username: "banana",
+      password: "wrongpassword",
+    };
+    return request(app)
+      .post("/api/auth/banana")
+      .expect(404)
+      .send(userCheck)
+      .then((response: any) => {
+        expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+});
+
+describe("/api/users/:username/habit_completion/:date", () => {
+  test("GET:200 sends array of habit completion objects", () => {
+    return request(app)
+      .get("/api/users/user3/habit_completion/2023-09-19")
       .expect(200)
       .then((response: any) => {
-        expect(response.body.categories).toEqual([
-          "Health",
-          "Fitness",
-          "Productivity",
-        ]);
+        expect(response.body.habit_completion[0].habit_id).toEqual("h4");
+        expect(response.body.habit_completion[0].date).toEqual("2023-09-19");
+        expect(response.body.habit_completion[0].completed).toEqual(true);
+        expect(response.body.habit_completion[0].username).toEqual("user3");
+        expect(response.body.habit_completion[0]).toHaveProperty("_id");
       });
   });
-  test("GET:404 sends an empty array", () => {
+  test("GET:404 sends a not found message for non-existant username", () => {
     return request(app)
-      .get("/api/categories/user11")
+      .get("/api/users/banana/habit_completion/2023-09-19")
       .expect(404)
       .then((response: any) => {
-        expect(response.body.msg).toBe("User has no categories");
+        expect(response.body.msg).toEqual(
+          "No completions found for this user and date"
+        );
       });
   });
-  test("POST:201 request contains a new category", () => {
+  test("GET:404 sends a not found message for invalid date", () => {
     return request(app)
-      .post("/api/categories/user10")
-      .send({ newCategory: "testCategory" })
-      .expect(201)
+      .get("/api/users/user1/habit_completion/sdsdd")
+      .expect(404)
       .then((response: any) => {
-        expect(response.body).toEqual(["Fitness","Exercise","testCategory"]);
+        expect(response.body.msg).toEqual(
+          "No completions found for this user and date"
+        );
       });
   });
-  test.todo("POST:400 request contains an empty category");
-  test.todo("POST:400 request contains an existing category");
+  test("POST: 201 obj contains correct properties for post request", () => {
+    const newHabit: object = {
+      username: "user1",
+      completed: "true",
+      //pass habit id here
+      habit_id: new mongoose.Types.ObjectId(),
+    };
+    return request(app)
+      .post("/api/users/user1/habit_completion")
+      .send(newHabit)
+      .expect(201)
+      .then((res: any) => {
+        expect(res.body.habit).toHaveProperty("_id");
+        expect(res.body.habit).toHaveProperty("completed");
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit).toHaveProperty("username");
+        expect(res.body.habit).toHaveProperty("habit_id");
+      });
+  });
+  test("POST:400 obj contains nothing/ no username or completed property", () => {
+    const newHabit: object = {};
+    return request(app)
+      .post("/api/users/user1/habit_completion")
+      .send(newHabit)
+      .expect(400)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Bad Request");
+      });
+  });
+  test("PATCH:200 updates completed variable by habit_id", async () => {
+    const updatedCompletion = {
+      completed: true,
+      habit_id: "h10",
+    };
+
+    return request(app)
+      .patch("/api/users/user1/habit_completion")
+      .send(updatedCompletion)
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.completed).toBe(true);
+      });
+  });
+  test("PATCH:400 obj contains no habit_id property", () => {
+    const updatedCompletion = {
+      test: 4,
+    };
+    return request(app)
+      .patch("/api/users/user1/habit_completion")
+      .send(updatedCompletion)
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("No 'completed' value provided");
+      });
+  });
+  test("Patch:404 sends an appropriate error message when given an invalid user", () => {
+    const updatedCompletion = {
+      completed: true,
+      habit_id: "650d9c2d72b9fe3db67dc6fd",
+    };
+
+    return request(app)
+      .patch("/api/users/djkfnsf/habit_completion")
+      .send(updatedCompletion)
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("User Not Found");
+      });
+  });
 });

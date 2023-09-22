@@ -1,9 +1,9 @@
 var { mongoose } = require("mongoose");
-const { config } = require("dotenv");
+var { config } = require("dotenv");
 
 config();
 
-const DATABASE_URL = process.env.DATABASE_URL as string;
+var DATABASE_URL = process.env.DATABASE_URL as string;
 
 mongoose.connect(DATABASE_URL);
 
