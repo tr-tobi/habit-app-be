@@ -10,6 +10,7 @@ const {
   postCompletion,
   patchCompletion,
 } = require("./controllers/habitCompletionRoute");
+const { getCategories, postCategory } = require("./controllers/categories");
 const {
   getUser,
   getAllUsers,
@@ -56,6 +57,10 @@ router.get(
 router.post("/api/users/:username/habit_completion", getUser, postCompletion);
 
 router.patch("/api/users/:username/habit_completion", getUser, patchCompletion);
+
+router.get("/api/categories/:username", getCategories);
+
+router.post("/api/categories/:username", postCategory);
 
 const { PORT = 9090 } = process.env;
 app.listen(PORT, () => {

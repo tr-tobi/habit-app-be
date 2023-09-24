@@ -84,8 +84,8 @@ exports.postUserAuth = (req: any, res: any) => {
 };
 
 exports.patchUser = async (req: any, res: any) => {
+  const { username } = req.params;
   if (req.body.password != null || req.body.password != undefined) {
-    const { username } = req.params;
     try {
       const existingUser = await Users.findOne({ username });
 
@@ -94,11 +94,12 @@ exports.patchUser = async (req: any, res: any) => {
       }
 
       existingUser.password = req.body.password;
-      const updatedUser = await existingUser.save();
-
-      res.json(updatedUser);
+      await Users.updateOne(
+        { username },
+        { $set: { password: req.body.password } }
+      );
+      res.json(existingUser);
     } catch (err) {
-      console.error(err);
       res.status(500).json({ msg: "Error saving user data" });
     }
   } else {
