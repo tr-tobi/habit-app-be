@@ -1,12 +1,17 @@
 var mongoose = require("mongoose");
 var completionSchema = require("../models/habit-completion");
+import { NextFunction, Request, Response } from "express";
 
 var Completion = mongoose.model(
   "habit_completion",
   completionSchema,
   "habit_completion"
 );
-exports.getCompletionByDate = async (req: any, res: any, next: any) => {
+exports.getCompletionByDate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { username, date } = req.params;
 
   try {
@@ -20,18 +25,18 @@ exports.getCompletionByDate = async (req: any, res: any, next: any) => {
         .json({ msg: "No completions found for this user and date" });
     }
 
-    res.completions = completions;
+    res.locals.completions = completions;
     next();
   } catch (err: any) {
     return res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
-exports.completionRes = (req: any, res: any) => {
-  res.send({ habit_completion: res.completions });
+exports.completionRes = (req: Request, res: Response) => {
+  res.send({ habit_completion: res.locals.completions });
 };
 
-exports.postCompletion = async (req: any, res: any) => {
+exports.postCompletion = async (req: Request, res: Response) => {
   const date = new Date();
   const newDate = date.toISOString().split("T")[0];
   const { username, completed, habit_id } = req.body;
@@ -55,7 +60,7 @@ exports.postCompletion = async (req: any, res: any) => {
   }
 };
 
-exports.patchCompletion = async (req: any, res: any) => {
+exports.patchCompletion = async (req: Request, res: Response) => {
   const { completed, habit_id } = req.body;
 
   if (completed != null || completed != undefined) {
