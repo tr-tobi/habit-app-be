@@ -194,7 +194,7 @@ describe("/api/users/:username", () => {
 });
 
 describe("/api/auth/:username", () => {
-  test("GET:200 returns an object with true for correct password", () => {
+  test("POST:200 returns an object with true for correct password", () => {
     const userCheck: object = {
       username: "user2",
       password: "password2",
