@@ -5,7 +5,6 @@ var { habitsData } = require("../db/seed/data/test-data/habits");
 var {
   habitCompletionData,
 } = require("../db/seed/data/test-data/habit-completion");
-const bcrypt = require("bcrypt");
 var mongoose = require("mongoose");
 const usersJson = require("../db/seed/data/test-data/json/test.users.json");
 var { insertUsers, insertCompletion } = require("../db/seed/run-seed"); // Import the insertUsers function

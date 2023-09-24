@@ -1,18 +1,19 @@
 var mongoose = require("mongoose");
 var usersSchema = require("../models/index");
+import { NextFunction, Request, Response } from "express";
 
 var Users = mongoose.model("Users", usersSchema);
 
-exports.getAllUsers = async (req: any, res: any) => {
+exports.getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await Users.find();
-    res.json({ users: users });
-  } catch (err) {
+    res.json({ users });
+  } catch (err: any) {
     res.status(500).json({ msg: "error" });
   }
 };
 
-exports.postUser = async (req: any, res: any) => {
+exports.postUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
   try {
@@ -50,7 +51,7 @@ exports.postUser = async (req: any, res: any) => {
   }
 };
 
-exports.getUser = async (req: any, res: any, next: any) => {
+exports.getUser = async (req: Request, res: Response, next: NextFunction) => {
   let user;
   try {
     user = await Users.find({ username: req.params.username });
@@ -60,30 +61,36 @@ exports.getUser = async (req: any, res: any, next: any) => {
   } catch (err: any) {
     return res.status(500).json({ msg: "Internal Server Error" });
   }
-  res.user = user;
+  res.locals.user = user;
 
   next();
 };
 
-exports.getUserResponse = (req: any, res: any) => {
-  res.send({ user: res.user });
+exports.getUserResponse = (req: Request, res: Response) => {
+  res.send({ user: res.locals.user });
 };
 
-exports.postUserAuth = (req: any, res: any) => {
-  let correct: Boolean = false;
+exports.postUserAuth = (req: Request, res: Response) => {
+  let correct: boolean = false;
+
   if (
-    req.body.password === res.user[0].password &&
-    req.body.username === res.user[0].username
+    res.locals &&
+    res.locals.user &&
+    Array.isArray(res.locals.user) &&
+    res.locals.user.length > 0
   ) {
-    correct = true;
-  } else {
-    correct = false;
+    if (
+      req.body.password === res.locals.user[0].password &&
+      req.body.username === res.locals.user[0].username
+    ) {
+      correct = true;
+    }
   }
 
   res.status(201).json({ correct });
 };
 
-exports.patchUser = async (req: any, res: any) => {
+exports.patchUser = async (req: Request, res: Response) => {
   const { username } = req.params;
   if (req.body.password != null || req.body.password != undefined) {
     try {
@@ -99,7 +106,7 @@ exports.patchUser = async (req: any, res: any) => {
         { $set: { password: req.body.password } }
       );
       res.json(existingUser);
-    } catch (err) {
+    } catch (err: any) {
       res.status(500).json({ msg: "Error saving user data" });
     }
   } else {
@@ -107,7 +114,7 @@ exports.patchUser = async (req: any, res: any) => {
   }
 };
 
-exports.deleteUser = async (req: any, res: any) => {
+exports.deleteUser = async (req: Request, res: Response) => {
   try {
     await Users.deleteOne({ username: "res.user" });
     res.json({ msg: "User Deleted" });
