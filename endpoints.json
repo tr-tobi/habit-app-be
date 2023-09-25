@@ -1,0 +1,162 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/users": {
+    "description": "serves an object with an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "_id": "65114e0d5d05ff1d7d9ef257",
+          "username": "user1",
+          "email": "user1@example.com",
+          "password": "password1",
+          "habit_categories": ["Health", "Fitness", "Productivity"],
+          "challenges": [
+            "30-Day Workout Challenge",
+            "Read a Book a Week Challenge"
+          ],
+          "habits": ["h1", "h3"],
+          "notes": [],
+          "__v": 0
+        },
+        {
+          "_id": "65114e0d5d05ff1d7d9ef258",
+          "username": "user2",
+          "email": "user2@example.com",
+          "password": "password2",
+          "habit_categories": ["Mindfulness", "Coding", "Cooking"],
+          "challenges": ["Daily Meditation Challenge"],
+          "habits": ["h2", "h4"],
+          "notes": [],
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "POST /api/users/": {
+    "description": "Posts a user to users list",
+    "queries": [],
+    "exampleRequest": {
+      "username": "test123",
+      "email": "test123@gmail.com",
+      "password": "12345"
+    },
+    "exampleResponse": {
+      "user": {
+        "username": "test123",
+        "habit_categories": [],
+        "challenges": [],
+        "habits": [],
+        "notes": []
+      }
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an object with an array for the information of a given user",
+    "queries": [],
+    "exampleResponse": {
+      "user": [
+        {
+          "_id": "65114e0d5d05ff1d7d9ef258",
+          "username": "user2",
+          "email": "user2@example.com",
+          "password": "password2",
+          "habit_categories": ["Mindfulness", "Coding", "Cooking"],
+          "challenges": ["Daily Meditation Challenge"],
+          "habits": ["h2", "h4"],
+          "notes": [],
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "PATCH /api/users/:username": {
+    "description": "serves an object with updated user password",
+    "queries": [],
+    "exampleRequest": {
+      "password": "newpassword"
+    },
+    "exampleResponse": {
+      "user": [
+        {
+          "_id": "65114e0d5d05ff1d7d9ef258",
+          "username": "user2",
+          "email": "user2@example.com",
+          "password": "newpassword",
+          "habit_categories": ["Mindfulness", "Coding", "Cooking"],
+          "challenges": ["Daily Meditation Challenge"],
+          "habits": ["h2", "h4"],
+          "notes": [],
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "DELETE /api/users/:username": {
+    "description": "serves an object with updated user password",
+    "queries": [],
+    "exampleResponse": { "msg": "User Deleted" }
+  },
+  "POST /api/auth/:username": {
+    "description": "serves boolean property for logging in",
+    "queries": [],
+    "exampleRequest": {
+      "username": "user2",
+      "password": "password2"
+    },
+    "exampleResponse": { "correct": true }
+  },
+  "GET /api/users/:username/habit_completion/:date": {
+    "description": "serves an object with an array of habit_completion objects",
+    "queries": [],
+    "exampleResponse": {
+      "habit_completion": [
+        {
+          "_id": "65115c43ef950b30b81d4c86",
+          "habit_id": "h4",
+          "date": "2023-09-19",
+          "completed": true,
+          "username": "user3",
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "POST /api/users/user1/habit_completion": {
+    "description": "Creates a new habit_completion object",
+    "queries": [],
+    "exampleRequest": {
+      "username": "user1",
+      "completed": "true",
+      "habit_id": "65115d335ae939e57ab6e2a2"
+    },
+    "exampleResponse": {
+      "habit": {
+        "habit_id": "65115d335ae939e57ab6e2a2",
+        "date": "2023-09-25",
+        "completed": true,
+        "username": "user1",
+        "_id": "65115d335ae939e57ab6e2a3",
+        "__v": 0
+      }
+    }
+  },
+  "PATCH /api/users/user1/habit_completion": {
+    "description": "updates completed variable for a specific habit",
+    "queries": [],
+    "exampleRequest": {
+      "completed": true,
+      "habit_id": "h10"
+    },
+    "exampleResponse": {
+      "_id": "65115e0cf1bd7b51731a018e",
+      "habit_id": "h10",
+      "date": "2023-09-19",
+      "completed": true,
+      "username": "user1",
+      "__v": 0
+    }
+  }
+}
