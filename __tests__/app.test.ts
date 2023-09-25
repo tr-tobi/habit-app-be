@@ -353,7 +353,7 @@ describe("/api/categories/:username", () => {
   });
   test("GET:404 sends an empty array", () => {
     return request(app)
-      .get("/api/categories/user11")
+      .get("/api/categories/happy123")
       .expect(404)
       .then((response: any) => {
         expect(response.body.msg).toBe("User has no categories");
@@ -368,6 +368,22 @@ describe("/api/categories/:username", () => {
         expect(response.body).toEqual(["Fitness", "Exercise", "testCategory"]);
       });
   });
-  test.todo("POST:400 request contains an empty category");
-  test.todo("POST:400 request contains an existing category");
+  test("POST:400 request contains an empty category", () => {
+    return request(app)
+      .post("/api/categories/happy123")
+      .send({ newCategory: "  " })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Please input non-empty category");
+      });
+  });
+  test("POST:400 request contains an existing category", () => {
+    return request(app)
+      .post("/api/categories/user1")
+      .send({ newCategory: "Health" })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Category already exists");
+      });
+  });
 });
