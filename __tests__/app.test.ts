@@ -18,6 +18,7 @@ beforeEach(async () => {
   session.startTransaction();
   await mongoose.connection.collection("users").deleteMany({});
   await mongoose.connection.collection("habit_completion").deleteMany({});
+  await mongoose.connection.collection("habit").deleteOne({});
 
   await Promise.all([insertUsers(usersJson), insertCompletion(completionJson)]);
 });
@@ -397,4 +398,110 @@ describe("/api/categories/:username", () => {
         expect(response.body.msg).toBe("Category already exists");
       });
   });
+});
+
+describe("/api/users/:username/habits", () => {
+  test("GET:200 sends an array of habit objects each habit should have the specified properties", () => {
+    return request(app)
+      .get("/api/users/user1/habits")
+      .expect(200)
+      .then((res: any) => {
+        expect(res.body.habits).toEqual(expect.any(Array));
+        expect(res.body.habits[0]).toHaveProperty("date");
+        expect(res.body.habits[0]).toHaveProperty("habit_name");
+        expect(res.body.habits[0]).toHaveProperty("habit_category");
+        expect(res.body.habits[0]).toHaveProperty("description");
+        expect(res.body.habits[0]).toHaveProperty("occurrence");
+      });
+  });
+
+  test("POST:201 inserts a new habit to the db and sends the new habit to the client", () => {
+    const newHabit: object = {
+      habit_name: "Paint",
+      habit_category: "Mindfulness",
+      description: "Paint every evening.",
+      occurrence: ["Daily"],
+    };
+    return request(app)
+      .post("/api/users/user1/habits")
+      .send(newHabit)
+      .expect(201)
+      .then((res: any) => {
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit).toHaveProperty("habit_name");
+        expect(res.body.habit).toHaveProperty("habit_category");
+        expect(res.body.habit).toHaveProperty("description");
+        expect(res.body.habit).toHaveProperty("occurrence");
+      });
+  });
+
+  test("POST:400 sends an appropriate error message when given a bad habit (missing properties: habit_name and occurence )", () => {
+    const newHabit: object = {
+      habit_category: "Mindfulness",
+      description: "Nap every evening.",
+    };
+    return request(app)
+      .post("/api/users/user1/habits")
+      .send(newHabit)
+      .expect(400)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Bad Request");
+      });
+  });
+});
+describe("/api/users/:username/habits/:_id", () => {
+  test("PATCH:201 updates a habit by id", () => {
+    const newHabit: object = {
+      habit_name: "Sleep",
+      habit_category: "Mindfulness",
+      description: "Sleep every evening.",
+      occurrence: ["Weekly"],
+    };
+    return request(app)
+      .patch("/api/users/user2/habits/650c5a2f98c06e0ffa13a5a9")
+      .send(newHabit)
+      .expect(201)
+      .then((res: any) => {
+        expect(res.body.habit).toEqual({
+          _id: '650c5a2f98c06e0ffa13a5a9',
+          date: '2023-09-19T00:00:00.000Z',
+          habit_name: 'Sleep',
+          habit_category: 'Mindfulness',
+          description: 'Sleep every evening.',
+          occurrence: ['Weekly'],
+          __v: 1
+        })    
+  })
+})
+test("PATCH:400 sends an appropriate error message when given an invalid id", () => {
+  return request(app)
+    .patch("/api/users/user2/habits/invalidid")
+    .send({ occurrence: ["Daily"]})
+    .expect(400)
+    .then((res: any) => {
+      expect(res.body.msg).toBe("Bad Request");
+    });
+});
+test("PATCH:404 sends an appropriate error message when given a valid but non-existent id", () => {
+  return request(app)
+    .patch("/api/users/user2/habits/650c2a6958e406e373639780")
+    .send({ occurrence: ["Daily"]})
+    .expect(404)
+    .then((res: any) => {
+      expect(res.body.msg).toBe("Habit not found");
+    });
+});
+});
+describe("/api/users/:username/habits/:_id", () => {
+  test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
+    return request(app).delete("/api/users/user2/habits/650c600b988f2c688dc8f521").expect(204);
+  })
+  test("DELETE: 404 responds with appropriate error message when given non-existent id", () => {
+    return request(app)
+      .delete("/api/users/user2/habits/650c5a7b2a297337f65c6967")
+      .expect(404)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Habit not found");
+      });
+})
 });

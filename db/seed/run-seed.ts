@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var usersSchema = require("../../models/index");
+var usersSchema = require("../../models/usersSchema");
 var completionSchema = require("../../models/habit-completion");
 
 var Users = mongoose.model("Users", usersSchema);

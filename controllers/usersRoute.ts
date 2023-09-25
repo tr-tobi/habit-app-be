@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var usersSchema = require("../models/index");
+var usersSchema = require("../models/usersSchema");
 import { NextFunction, Request, Response } from "express";
 
 var Users = mongoose.model("Users", usersSchema);

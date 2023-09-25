@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 var mongoose = require("mongoose");
-var usersSchema = require("../models/index");
+var usersSchema = require("../models/usersSchema");
 var Users = mongoose.model("Users", usersSchema);
 
 exports.getCategories = async (req: Request, res: Response) => {

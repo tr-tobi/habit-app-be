@@ -1,8 +1,8 @@
-GET http://localhost:9090/users
+GET http://localhost:9090/api/users
 
 ###
 
-POST http://localhost:9090/users
+POST http://localhost:9090/api/users
 Content-Type: application/json
 
 {
@@ -14,5 +14,39 @@ Content-Type: application/json
     "habits": [],
     "notes": []
 }
+
+###
+
+
+GET http://localhost:9090/api/users/user2/habits
+
+###
+
+POST http://localhost:9090/api/users/user2/habits
+Content-Type: application/json
+
+{
+    "date": "2023-09-19",
+    "habit_name": "Morning Run",
+    "habit_category": "Fitness",
+    "description": "Go for a 30-minute run every morning.",
+    "occurrence": ["Monday", "Wednesday", "Friday"]
+
+}
+
+###
+
+PATCH http://localhost:9090/api/users/user2/habits/650c2a6958e406e373639788
+Content-Type: application/json
+
+{   
+
+    "habit_name": "Revise for exam",
+    "habit_category": "Reading",
+    "description": "Read daily."
+
+}
+
+
 
 ###
