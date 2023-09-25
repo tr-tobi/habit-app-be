@@ -4,7 +4,7 @@ var router = express.Router();
 
 var habitsSchema = require("../models/habitsSchema");
 
-const Habits = mongoose.model("Habits", habitsSchema);
+var Habits = mongoose.model("Habits", habitsSchema);
 
 exports.getAllHabits = async (req: any, res: any) => {
   try {
@@ -22,6 +22,7 @@ exports.postHabit = async (req: any, res: any) => {
     habit_category: req.body.habit_category,
     description: req.body.description,
     occurrence: req.body.occurrence,
+    habit_id: new mongoose.Types.ObjectId(),
   });
   try {
     const newHabit = await habit.save();
@@ -32,33 +33,38 @@ exports.postHabit = async (req: any, res: any) => {
 };
 
 exports.patchHabit = async (req: any, res: any) => {
-  const habitId = req.params._id;
+  const habitId = req.params.habit_id;
 
   const updatedFields = req.body;
-
-  try {
-    const existingHabit = await Habits.findById(habitId);
-    if (!existingHabit) {
-      return res.status(404).json({ msg: "Habit not found" });
+  const existingHabit = await Habits.find({ habit_id: habitId });
+  if (existingHabit.length != 0) {
+    try {
+      const updatedHabit = await Habits.findOneAndUpdate(
+        { habit_id: habitId },
+        { $set: updatedFields },
+        { new: true }
+      );
+      res.status(201).json({ habit: updatedHabit });
+    } catch (err: any) {
+      res.status(400).json({ msg: "Bad Request" });
     }
-    Object.assign(existingHabit, updatedFields);
-    const patchedHabit = await existingHabit.save();
-    res.status(201).json({ habit: patchedHabit });
-  } catch (err: any) {
-    res.status(400).json({ msg: "Bad Request" });
+  } else {
+    return res.status(404).json({ msg: "Habit not found" });
   }
 };
 
 exports.deleteHabit = async (req: any, res: any) => {
-  const habitId = req.params._id;
-  try {
-    const existingHabit = await Habits.findById(habitId);
-    if (!existingHabit) {
-      return res.status(404).json({ msg: "Habit not found" });
+  const habitId = req.params.habit_id;
+  const existingHabit = await Habits.find({ habit_id: habitId });
+
+  if (existingHabit.length != 0) {
+    try {
+      await Habits.deleteOne({ habit_id: habitId });
+      res.status(204).json();
+    } catch (err: any) {
+      res.status(400).json({ msg: "Bad Request" });
     }
-    await existingHabit.deleteOne();
-    res.status(204).send();
-  } catch (err: any) {
-    res.status(400).json({ msg: "Bad Request" });
+  } else {
+    return res.status(404).json({ msg: "Habit not found" });
   }
 };

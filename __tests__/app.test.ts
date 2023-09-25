@@ -7,8 +7,13 @@ var {
 } = require("../db/seed/data/test-data/habit-completion");
 var mongoose = require("mongoose");
 const usersJson = require("../db/seed/data/test-data/json/test.users.json");
-var { insertUsers, insertCompletion } = require("../db/seed/run-seed"); // Import the insertUsers function
+var {
+  insertUsers,
+  insertCompletion,
+  insertHabits,
+} = require("../db/seed/run-seed");
 const completionJson = require("../db/seed/data/test-data/json/test.habit_completion.json");
+const habitsJson = require("../db/seed/data/test-data/json/test.habits.json");
 var endpoints = require("../endpoints.json");
 
 let session: any;
@@ -18,9 +23,13 @@ beforeEach(async () => {
   session.startTransaction();
   await mongoose.connection.collection("users").deleteMany({});
   await mongoose.connection.collection("habit_completion").deleteMany({});
-  await mongoose.connection.collection("habit").deleteOne({});
+  await mongoose.connection.collection("habits").deleteMany({});
 
-  await Promise.all([insertUsers(usersJson), insertCompletion(completionJson)]);
+  await Promise.all([
+    insertUsers(usersJson),
+    insertCompletion(completionJson),
+    insertHabits(habitsJson),
+  ]);
 });
 
 afterAll(async () => {
@@ -432,6 +441,7 @@ describe("/api/users/:username/habits", () => {
         expect(res.body.habit).toHaveProperty("habit_category");
         expect(res.body.habit).toHaveProperty("description");
         expect(res.body.habit).toHaveProperty("occurrence");
+        expect(res.body.habit).toHaveProperty("habit_id");
       });
   });
 
@@ -449,7 +459,7 @@ describe("/api/users/:username/habits", () => {
       });
   });
 });
-describe("/api/users/:username/habits/:_id", () => {
+describe("/api/users/:username/habits/:habit_id", () => {
   test("PATCH:201 updates a habit by id", () => {
     const newHabit: object = {
       habit_name: "Sleep",
@@ -458,44 +468,32 @@ describe("/api/users/:username/habits/:_id", () => {
       occurrence: ["Weekly"],
     };
     return request(app)
-      .patch("/api/users/user2/habits/650c5a2f98c06e0ffa13a5a9")
+      .patch("/api/users/user2/habits/h2")
       .send(newHabit)
       .expect(201)
       .then((res: any) => {
-        expect(res.body.habit).toEqual({
-          _id: '650c5a2f98c06e0ffa13a5a9',
-          date: '2023-09-19T00:00:00.000Z',
-          habit_name: 'Sleep',
-          habit_category: 'Mindfulness',
-          description: 'Sleep every evening.',
-          occurrence: ['Weekly'],
-          __v: 1
-        })    
-  })
-})
-test("PATCH:400 sends an appropriate error message when given an invalid id", () => {
-  return request(app)
-    .patch("/api/users/user2/habits/invalidid")
-    .send({ occurrence: ["Daily"]})
-    .expect(400)
-    .then((res: any) => {
-      expect(res.body.msg).toBe("Bad Request");
-    });
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit.habit_name).toEqual("Sleep");
+        expect(res.body.habit.habit_category).toEqual("Mindfulness");
+        expect(res.body.habit.description).toEqual("Sleep every evening.");
+        expect(res.body.habit.occurrence).toEqual(["Weekly"]);
+        expect(res.body.habit.habit_id).toEqual("h2");
+      });
+  });
+  test("PATCH:404 sends an appropriate error message when given a valid but non-existent id", () => {
+    return request(app)
+      .patch("/api/users/user2/habits/650c2a6958e406e373639780")
+      .send({ occurrence: ["Daily"] })
+      .expect(404)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Habit not found");
+      });
+  });
 });
-test("PATCH:404 sends an appropriate error message when given a valid but non-existent id", () => {
-  return request(app)
-    .patch("/api/users/user2/habits/650c2a6958e406e373639780")
-    .send({ occurrence: ["Daily"]})
-    .expect(404)
-    .then((res: any) => {
-      expect(res.body.msg).toBe("Habit not found");
-    });
-});
-});
-describe("/api/users/:username/habits/:_id", () => {
+describe("/api/users/:username/habits/:habit_id", () => {
   test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
-    return request(app).delete("/api/users/user2/habits/650c600b988f2c688dc8f521").expect(204);
-  })
+    return request(app).delete("/api/users/user2/habits/h2").expect(204);
+  });
   test("DELETE: 404 responds with appropriate error message when given non-existent id", () => {
     return request(app)
       .delete("/api/users/user2/habits/650c5a7b2a297337f65c6967")
@@ -503,5 +501,5 @@ describe("/api/users/:username/habits/:_id", () => {
       .then((res: any) => {
         expect(res.body.msg).toBe("Habit not found");
       });
-})
+  });
 });

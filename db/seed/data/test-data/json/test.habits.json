@@ -1,6 +1,6 @@
 [
   {
-    "_id": "h1",
+    "habit_id": "h1",
     "date": "2023-09-19",
     "habit_name": "Morning Run",
     "habit_category": "Fitness",
@@ -8,7 +8,7 @@
     "occurrence": ["Monday", "Wednesday", "Friday"]
   },
   {
-    "_id": "h2",
+    "habit_id": "h2",
     "date": "2023-09-20",
     "habit_name": "Read a Book",
     "habit_category": "Reading",
@@ -16,7 +16,7 @@
     "occurrence": ["Tuesday", "Thursday", "Saturday"]
   },
   {
-    "_id": "h3",
+    "habit_id": "h3",
     "date": "2023-09-21",
     "habit_name": "Meditation",
     "habit_category": "Mindfulness",
@@ -24,7 +24,7 @@
     "occurrence": ["Daily"]
   },
   {
-    "_id": "h4",
+    "habit_id": "h4",
     "date": "2023-09-22",
     "habit_name": "Learn Coding",
     "habit_category": "Coding",
@@ -32,7 +32,7 @@
     "occurrence": ["Monday", "Wednesday", "Friday"]
   },
   {
-    "_id": "h5",
+    "habit_id": "h5",
     "date": "2023-09-23",
     "habit_name": "Healthy Eating",
     "habit_category": "Health",
@@ -40,7 +40,7 @@
     "occurrence": ["Daily"]
   },
   {
-    "_id": "h6",
+    "habit_id": "h6",
     "date": "2023-09-24",
     "habit_name": "Yoga",
     "habit_category": "Fitness",
@@ -48,7 +48,7 @@
     "occurrence": ["Tuesday", "Thursday", "Saturday"]
   },
   {
-    "_id": "h7",
+    "habit_id": "h7",
     "date": "2023-09-25",
     "habit_name": "Writing Journal",
     "habit_category": "Writing",
@@ -56,7 +56,7 @@
     "occurrence": ["Daily"]
   },
   {
-    "_id": "h8",
+    "habit_id": "h8",
     "date": "2023-09-26",
     "habit_name": "Cooking",
     "habit_category": "Cooking",
@@ -64,7 +64,7 @@
     "occurrence": ["Sunday"]
   },
   {
-    "_id": "h9",
+    "habit_id": "h9",
     "date": "2023-09-27",
     "habit_name": "Productivity",
     "habit_category": "Productivity",
@@ -72,7 +72,7 @@
     "occurrence": ["Daily"]
   },
   {
-    "_id": "h10",
+    "habit_id": "h10",
     "date": "2023-09-28",
     "habit_name": "Learn a Language",
     "habit_category": "Learning",

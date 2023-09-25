@@ -1,3 +1,5 @@
+import { Schema } from "mongoose";
+
 var { mongoose } = require("mongoose");
 var { config } = require("dotenv");
 
@@ -30,6 +32,10 @@ var habitsSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  habit_id: {
+    type: Schema.Types.Mixed,
+    default: mongoose.Types.ObjectId,
+  },
 });
 
 module.exports = habitsSchema;

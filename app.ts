@@ -82,9 +82,9 @@ router.get("/api/users/:username/habits", getAllHabits);
 
 router.post("/api/users/:username/habits", postHabit);
 
-router.patch("/api/users/:username/habits/:_id", patchHabit);
+router.patch("/api/users/:username/habits/:habit_id", patchHabit);
 
-router.delete("/api/users/:username/habits/:_id", deleteHabit);
+router.delete("/api/users/:username/habits/:habit_id", deleteHabit);
 
 const { PORT = 9090 } = process.env;
 app.listen(PORT, () => {
