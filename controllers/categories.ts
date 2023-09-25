@@ -1,7 +1,7 @@
 import { log } from "console";
 
 var mongoose = require("mongoose");
-var usersSchema = require("../models/index");
+var usersSchema = require("../models/usersSchema");
 
 const Users = mongoose.model("Users", usersSchema);
 
