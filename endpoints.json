@@ -124,7 +124,7 @@
       ]
     }
   },
-  "POST /api/users/user1/habit_completion": {
+  "POST /api/users/:username/habit_completion": {
     "description": "Creates a new habit_completion object",
     "queries": [],
     "exampleRequest": {
@@ -143,7 +143,7 @@
       }
     }
   },
-  "PATCH /api/users/user1/habit_completion": {
+  "PATCH /api/users/:username/habit_completion": {
     "description": "updates completed variable for a specific habit",
     "queries": [],
     "exampleRequest": {
@@ -157,6 +157,21 @@
       "completed": true,
       "username": "user1",
       "__v": 0
+    }
+  },
+  "GET /api/categories/:username:": {
+    "description": "serves an array of user's habit categories",
+    "queries": [],
+    "exampleResponse": {
+      "categories": ["Health", "Fitness", "Productivity"]
+    }
+  },
+  "POST /api/categories/:username:": {
+    "description": "post a new habit category",
+    "queries": [],
+    "exampleRequest": { "newCategory": "testCategory" },
+    "exampleResponse": {
+      "categories": ["Fitness", "Exercise", "testCategory"]
     }
   }
 }
