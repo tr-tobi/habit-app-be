@@ -50,15 +50,15 @@ exports.patchHabit = async (req: any, res: any) => {
 };
 
 exports.deleteHabit = async (req: any, res: any) => {
-const habitId = req.params._id;
-try {
-const existingHabit = await Habits.findById(habitId);
-if (!existingHabit) {
-return res.status(404).json({ msg: "Habit not found" });
-}
-await existingHabit.deleteOne();
-res.status(204).send()
-} catch (err: any) {
-res.status(400).json({ msg: "Bad Request" });
-}
+  const habitId = req.params._id;
+  try {
+    const existingHabit = await Habits.findById(habitId);
+    if (!existingHabit) {
+      return res.status(404).json({ msg: "Habit not found" });
+    }
+    await existingHabit.deleteOne();
+    res.status(204).send();
+  } catch (err: any) {
+    res.status(400).json({ msg: "Bad Request" });
+  }
 };
