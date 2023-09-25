@@ -9,6 +9,7 @@ var mongoose = require("mongoose");
 const usersJson = require("../db/seed/data/test-data/json/test.users.json");
 var { insertUsers, insertCompletion } = require("../db/seed/run-seed"); // Import the insertUsers function
 const completionJson = require("../db/seed/data/test-data/json/test.habit_completion.json");
+var endpoints = require("../endpoints.json");
 
 let session: any;
 
@@ -25,6 +26,17 @@ beforeEach(async () => {
 afterAll(async () => {
   await session.abortTransaction();
   session.endSession();
+});
+
+describe("/api/", () => {
+  test("GET:200 sends an object of all available endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body).toEqual(endpoints);
+      });
+  });
 });
 
 describe("/api/users", () => {
@@ -207,7 +219,7 @@ describe("/api/auth/:username", () => {
         expect(response.body.correct).toEqual(true);
       });
   });
-  test("GET:200 returns an object with false for incorrect password", () => {
+  test("POST:200 returns an object with false for incorrect password", () => {
     const userCheck: object = {
       username: "user2",
       password: "wrongpassword",
@@ -220,7 +232,7 @@ describe("/api/auth/:username", () => {
         expect(response.body.correct).toEqual(false);
       });
   });
-  test("GET:404 returns an not found for a username not in the database", () => {
+  test("POST:404 returns an not found for a username not in the database", () => {
     const userCheck: object = {
       username: "banana",
       password: "wrongpassword",
@@ -272,7 +284,6 @@ describe("/api/users/:username/habit_completion/:date", () => {
     const newHabit: object = {
       username: "user1",
       completed: "true",
-      //pass habit id here
       habit_id: new mongoose.Types.ObjectId(),
     };
     return request(app)
@@ -354,7 +365,7 @@ describe("/api/categories/:username", () => {
   });
   test("GET:404 sends an empty array", () => {
     return request(app)
-      .get("/api/categories/user11")
+      .get("/api/categories/happy123")
       .expect(404)
       .then((response: any) => {
         expect(response.body.msg).toBe("User has no categories");
@@ -369,8 +380,24 @@ describe("/api/categories/:username", () => {
         expect(response.body).toEqual(["Fitness", "Exercise", "testCategory"]);
       });
   });
-  test.todo("POST:400 request contains an empty category");
-  test.todo("POST:400 request contains an existing category");
+  test("POST:400 request contains an empty category", () => {
+    return request(app)
+      .post("/api/categories/happy123")
+      .send({ newCategory: "  " })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Please input non-empty category");
+      });
+  });
+  test("POST:400 request contains an existing category", () => {
+    return request(app)
+      .post("/api/categories/user1")
+      .send({ newCategory: "Health" })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Category already exists");
+      });
+  });
 });
 
 describe("/api/users/:username/habits", () => {

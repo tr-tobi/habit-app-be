@@ -1,11 +1,9 @@
-import { log } from "console";
-
+import { Request, Response } from "express";
 var mongoose = require("mongoose");
-var usersSchema = require("../models/usersSchema");
+var usersSchema = require("../models/index");
+var Users = mongoose.model("Users", usersSchema);
 
-const Users = mongoose.model("Users", usersSchema);
-
-async function getCategories(req: any, res: any) {
+exports.getCategories = async (req: Request, res: Response) => {
   let user;
   try {
     user = await Users.findOne({ username: req.params.username });
@@ -16,29 +14,29 @@ async function getCategories(req: any, res: any) {
     console.log(err);
     return res.status(500).json({ msg: "Internal Server Error" });
   }
-  res.categories = user.habit_categories;
-  res.status(200).send({ categories: res.categories });
-}
+  res.status(200).send({ categories: user.habit_categories });
+};
 
-async function postCategory(req: any, res: any) {
+exports.postCategory = async (req: Request, res: Response) => {
   try {
     const newCategory = req.body.newCategory;
-    console.log(newCategory, "controller");
-    
     const user = await Users.findOne({ username: req.params.username });
+
     if (/^\s*$/.test(newCategory)) {
       return res.status(400).json({ msg: "Please input non-empty category" });
     }
     if (user.habit_categories.includes(newCategory)) {
       return res.status(400).json({ msg: "Category already exists" });
     }
-    user.habit_categories.push(newCategory);
-    await user.save();
-    res.status(201).json(user.habit_categories);
+
+    const categories = [...user.habit_categories, newCategory];
+    const update = { $set: { habit_categories: categories } };
+    await Users.findOneAndUpdate({ username: req.params.username }, update);
+
+    const updatedUser = await Users.findOne({ username: req.params.username });
+    res.status(201).json(updatedUser.habit_categories);
   } catch (err: any) {
     console.log(err);
     return res.status(500).json({ msg: "Internal Server Error" });
   }
-}
-
-module.exports = { getCategories, postCategory };
+};

@@ -1,4 +1,6 @@
-var express = require("express");
+import { error } from "console";
+
+const express = require("express");
 require("dotenv").config();
 var mongoose = require("mongoose");
 var router = express.Router();
@@ -26,6 +28,7 @@ const {
   deleteUser,
 } = require("./controllers/usersRoute");
 var completionSchema = require("./models/habit-completion");
+var endpoints = require("./endpoints.json");
 
 var app = express();
 app.use(express.json());
@@ -39,6 +42,14 @@ db.on("error", (error: any) => {
 
 db.once("open", () => {
   console.log("connected to database");
+});
+
+router.get("/api", (req: Request, res: any) => {
+  try {
+    res.send(endpoints);
+  } catch (err: any) {
+    res.status(500).json({ msg: "error" });
+  }
 });
 
 router.get("/api/users", getAllUsers);
