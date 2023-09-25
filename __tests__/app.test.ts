@@ -131,13 +131,12 @@ describe("/api/users/:username/habits/:_id", () => {
       occurrence: ["Weekly"],
     };
     return request(app)
-      .patch("/api/users/user2/habits/650c56c57225217d3baf10a7")
+      .patch("/api/users/user2/habits/650c5a2f98c06e0ffa13a5a9")
       .send(newHabit)
       .expect(201)
       .then((res: any) => {
-        console.log(res)
         expect(res.body.habit).toEqual({
-          _id: '650c56c57225217d3baf10a7',
+          _id: '650c5a2f98c06e0ffa13a5a9',
           date: '2023-09-19T00:00:00.000Z',
           habit_name: 'Sleep',
           habit_category: 'Mindfulness',
@@ -165,4 +164,17 @@ test("PATCH:404 sends an appropriate error message when given a valid but non-ex
       expect(res.body.msg).toBe("Habit not found");
     });
 });
+});
+describe("/api/users/:username/habits/:_id", () => {
+  test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
+    return request(app).delete("/api/users/user2/habits/650c5a7b2a297337f65c6967").expect(204);
+  })
+  test("DELETE: 404 responds with appropriate error message when given non-existent id", () => {
+    return request(app)
+      .delete("/api/users/user2/habits/650c5a7b2a297337f65c6967")
+      .expect(404)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Habit not found");
+      });
+})
 });
