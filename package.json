@@ -6,7 +6,7 @@
   "scripts": {
     "devStart": "ts-node app.ts",
     "test": "clear && jest",
-    "start": "node app.ts"
+    "start": "ts-node app.ts"
   },
   "author": "",
   "license": "ISC",
