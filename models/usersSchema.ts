@@ -1,9 +1,5 @@
 var { mongoose } = require("mongoose");
-var { config } = require("dotenv");
-
-config();
-
-var DATABASE_URL = process.env.DATABASE_URL as string;
+const { DATABASE_URL } = require("../connection");
 
 mongoose.connect(DATABASE_URL);
 
@@ -38,6 +34,5 @@ var usersSchema = new mongoose.Schema({
     required: false,
   },
 });
-
 
 module.exports = usersSchema;
