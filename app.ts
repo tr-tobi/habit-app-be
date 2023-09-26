@@ -6,6 +6,7 @@ const { getAllHabits } = require("./controllers/habitsRoute");
 const { postHabit } = require("./controllers/habitsRoute");
 const { patchHabit } = require("./controllers/habitsRoute");
 const { deleteHabit } = require("./controllers/habitsRoute");
+const { getAllNotes, postNote } = require("./controllers/notesRoute");
 const { DATABASE_URL } = require("./connection");
 
 mongoose.connect(DATABASE_URL);
@@ -87,6 +88,10 @@ router.post("/api/users/:username/habits", postHabit);
 router.patch("/api/users/:username/habits/:habit_id", patchHabit);
 
 router.delete("/api/users/:username/habits/:habit_id", deleteHabit);
+
+router.get("/api/users/:username/notes", getUser, getAllNotes);
+
+router.post("/api/users/:username/notes", getUser, postNote);
 
 const { PORT = 10000 } = process.env;
 app.listen(PORT, () => {

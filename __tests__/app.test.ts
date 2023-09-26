@@ -11,9 +11,11 @@ var {
   insertUsers,
   insertCompletion,
   insertHabits,
+  insertNotes,
 } = require("../db/seed/run-seed");
 const completionJson = require("../db/seed/data/test-data/json/test.habit_completion.json");
 const habitsJson = require("../db/seed/data/test-data/json/test.habits.json");
+const notesJson = require("../db/seed/data/test-data/json/notesTest.json");
 var endpoints = require("../endpoints.json");
 
 let session: any;
@@ -24,11 +26,13 @@ beforeEach(async () => {
   await mongoose.connection.collection("users").deleteMany({});
   await mongoose.connection.collection("habit_completion").deleteMany({});
   await mongoose.connection.collection("habits").deleteMany({});
+  await mongoose.connection.collection("notes").deleteMany({});
 
   await Promise.all([
     insertUsers(usersJson),
     insertCompletion(completionJson),
     insertHabits(habitsJson),
+    insertNotes(notesJson),
   ]);
 });
 
@@ -491,7 +495,6 @@ describe("/api/users/:username/habits/:habit_id", () => {
       });
   });
 });
-
 describe("/api/users/:username/habits/:habit_id", () => {
   test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
     return request(app).delete("/api/users/user2/habits/h2").expect(204);
@@ -502,6 +505,43 @@ describe("/api/users/:username/habits/:habit_id", () => {
       .expect(404)
       .then((res: any) => {
         expect(res.body.msg).toBe("Habit not found");
+      });
+  });
+});
+
+describe("/api/users/:username/notes", () => {
+  test("GET: 200 gets list of all notes made by a user", () => {
+    return request(app)
+      .get("/api/users/user2/notes")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.notes[0]).toHaveProperty("username");
+        expect(response.body.notes[0]).toHaveProperty("_id");
+        expect(response.body.notes[0]).toHaveProperty("date");
+        expect(response.body.notes[0]).toHaveProperty("body");
+      });
+  });
+  test("GET:404 sends a not found message for non-existant username", () => {
+    return request(app)
+      .get("/api/users/banana/notes")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+  test("POST: 201 adds a new note to a users notes list", () => {
+    const bodyObj = { body: "This is a test for the notes body" };
+    return request(app)
+      .post("/api/users/user2/notes")
+      .send(bodyObj)
+      .expect(201)
+      .then((response: any) => {
+        expect(response.body.newNote).toHaveProperty("username");
+        expect(response.body.newNote).toHaveProperty("_id");
+        expect(response.body.newNote).toHaveProperty("date");
+        expect(response.body.newNote.body).toEqual(
+          "This is a test for the notes body"
+        );
       });
   });
 });
