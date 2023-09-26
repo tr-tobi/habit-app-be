@@ -106,6 +106,6 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "types": ["node", "jest", "@testing-library/jest-dom"]
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "**/*.json"],
   "exclude": ["node_modules"]
 }
