@@ -1,6 +1,4 @@
-import { error } from "console";
-
-const express = require("express");
+var express = require("express");
 require("dotenv").config();
 var mongoose = require("mongoose");
 var router = express.Router();
