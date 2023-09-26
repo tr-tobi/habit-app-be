@@ -1,9 +1,7 @@
 var { mongoose } = require("mongoose");
 const { DATABASE_URL } = require("../connection");
 
-mongoose.connect(
-  "mongodb+srv://sainab:test123@habittracker.uyfmxmb.mongodb.net/"
-);
+mongoose.connect(DATABASE_URL);
 
 var usersSchema = new mongoose.Schema({
   _id: String,
