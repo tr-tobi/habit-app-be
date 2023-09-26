@@ -1,13 +1,15 @@
 var express = require("express");
 require("dotenv").config();
-var mongoose = require("mongoose");
+import mongoose from "mongoose";
 var router = express.Router();
 const { getAllHabits } = require("./controllers/habitsRoute");
 const { postHabit } = require("./controllers/habitsRoute");
 const { patchHabit } = require("./controllers/habitsRoute");
 const { deleteHabit } = require("./controllers/habitsRoute");
 
-mongoose.connect(process.env.DATABASE_URL);
+mongoose.connect(
+  "mongodb+srv://sainab:test123@habittracker.uyfmxmb.mongodb.net/"
+);
 const {
   getCompletionByDate,
   completionRes,
