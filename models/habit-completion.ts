@@ -2,10 +2,7 @@ import { Schema } from "mongoose";
 import mongoose from "mongoose";
 const { DATABASE_URL } = require("../connection");
 
-mongoose.connect(DATABASE_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(DATABASE_URL);
 
 var completionSchema = new mongoose.Schema(
   {
