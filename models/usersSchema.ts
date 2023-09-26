@@ -1,4 +1,4 @@
-var { mongoose } = require("mongoose");
+import mongoose from "mongoose";
 const { DATABASE_URL } = require("../connection");
 
 mongoose.connect(DATABASE_URL);
