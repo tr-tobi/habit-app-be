@@ -29,8 +29,11 @@ const {
 } = require("./controllers/usersRoute");
 var completionSchema = require("./models/habit-completion");
 var endpoints = require("./endpoints.json");
+const cors = require("cors");
 
 var app = express();
+app.use(cors());
+
 app.use(express.json());
 app.use(router);
 
