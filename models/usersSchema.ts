@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { DATABASE_URL } = require("../connection");
 
-mongoose.connect(DATABASE_URL);
+mongoose.connect(DATABASE_URL, { useNewUrlParser: true });
 
 var usersSchema = new mongoose.Schema({
   _id: String,
