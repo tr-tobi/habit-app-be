@@ -7,9 +7,7 @@ const { postHabit } = require("./controllers/habitsRoute");
 const { patchHabit } = require("./controllers/habitsRoute");
 const { deleteHabit } = require("./controllers/habitsRoute");
 
-mongoose.connect(
-  "mongodb+srv://sainab:test123@habittracker.uyfmxmb.mongodb.net/"
-);
+mongoose.connect(process.env.DATABASE_URL);
 const {
   getCompletionByDate,
   completionRes,
