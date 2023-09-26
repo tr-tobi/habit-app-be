@@ -2,7 +2,10 @@ import { Schema } from "mongoose";
 import mongoose from "mongoose";
 const { DATABASE_URL } = require("../connection");
 
-mongoose.connect(DATABASE_URL);
+mongoose.connect(DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 var habitsSchema = new mongoose.Schema({
   date: {

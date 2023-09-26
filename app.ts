@@ -8,7 +8,10 @@ const { patchHabit } = require("./controllers/habitsRoute");
 const { deleteHabit } = require("./controllers/habitsRoute");
 const { DATABASE_URL } = require("./connection");
 
-mongoose.connect(DATABASE_URL);
+mongoose.connect(DATABASE_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const {
   getCompletionByDate,
   completionRes,
