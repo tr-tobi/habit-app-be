@@ -2,7 +2,9 @@ import { Schema } from "mongoose";
 var { mongoose } = require("mongoose");
 const { DATABASE_URL } = require("../connection");
 
-mongoose.connect(DATABASE_URL);
+mongoose.connect(
+  "mongodb+srv://sainab:test123@habittracker.uyfmxmb.mongodb.net/"
+);
 
 var habitsSchema = new mongoose.Schema({
   date: {
