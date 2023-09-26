@@ -88,7 +88,7 @@ router.patch("/api/users/:username/habits/:habit_id", patchHabit);
 
 router.delete("/api/users/:username/habits/:habit_id", deleteHabit);
 
-const { PORT = 9090 } = process.env;
+const { PORT = 10000 } = process.env;
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
