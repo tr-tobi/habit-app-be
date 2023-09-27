@@ -523,6 +523,7 @@ describe("/api/users/:username/notes", () => {
         expect(response.body.notes[0]).toHaveProperty("_id");
         expect(response.body.notes[0]).toHaveProperty("date");
         expect(response.body.notes[0]).toHaveProperty("body");
+        expect(response.body.notes[0]).toHaveProperty("note_id");
       });
   });
   test("GET:404 sends a not found message for non-existant username", () => {
@@ -541,6 +542,7 @@ describe("/api/users/:username/notes", () => {
       .expect(201)
       .then((response: any) => {
         expect(response.body.newNote).toHaveProperty("username");
+        expect(response.body.newNote).toHaveProperty("note_id");
         expect(response.body.newNote).toHaveProperty("_id");
         expect(response.body.newNote).toHaveProperty("date");
         expect(response.body.newNote.body).toEqual(
@@ -623,7 +625,7 @@ describe("/api/users/:username/challenges", () => {
   });
 });
 
-describe.only("/api/users/:username/notes/:note_id", () => {
+describe("/api/users/:username/notes/:note_id", () => {
   test("PATCH:201 updates a note body", () => {
     return request(app)
       .patch(`/api/users/user1/notes/n1`)
