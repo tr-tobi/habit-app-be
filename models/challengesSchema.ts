@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { DATABASE_URL } = require("../connection");
+import { Schema } from "mongoose"
 
 mongoose.connect(DATABASE_URL);
 
@@ -32,6 +33,11 @@ var challengesSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  challenge_id: {
+      type: Schema.Types.Mixed,
+      default: mongoose.Types.ObjectId,
+    },
+  
 });
 
 module.exports = challengesSchema;

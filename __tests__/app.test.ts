@@ -560,14 +560,13 @@ describe("/api/users/:username/notes", () => {
       });
   });
 });
-
 describe("/api/users/:username/challenges", () => {
-  test("GET: 200 gets list of all notes made by a user", () => {
+  test("GET: 200 gets list of all challenges made by a user", () => {
     return request(app)
       .get("/api/users/user1/challenges")
       .expect(200)
       .then((response: any) => {
-        expect(response.body.challenges.length).toEqual(3);
+        expect(response.body.challenges.length).toEqual(2);
         expect(response.body.challenges[0]).toHaveProperty("username");
         expect(response.body.challenges[0]).toHaveProperty("_id");
         expect(response.body.challenges[0]).toHaveProperty("start_date");

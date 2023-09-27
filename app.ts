@@ -2,10 +2,8 @@ var express = require("express");
 require("dotenv").config();
 import mongoose from "mongoose";
 var router = express.Router();
-const { getAllHabits } = require("./controllers/habitsRoute");
-const { postHabit } = require("./controllers/habitsRoute");
-const { patchHabit } = require("./controllers/habitsRoute");
-const { deleteHabit } = require("./controllers/habitsRoute");
+const { getAllHabits, postHabit,patchHabit, deleteHabit } = require("./controllers/habitsRoute");
+
 const { getAllNotes, postNote } = require("./controllers/notesRoute");
 const { DATABASE_URL } = require("./connection");
 
@@ -32,6 +30,8 @@ const {
 const {
   getChallenges,
   postChallenge,
+  getChallenge,
+  deleteChallenge,
 } = require("./controllers/challengesRoute");
 var completionSchema = require("./models/habit-completion");
 var endpoints = require("./endpoints.json");
@@ -107,6 +107,9 @@ router.patch("/api/users/:username/notes/:note_id", patchNote);
 
 router.delete("/api/users/:username/notes/:note_id", deleteNote);
 
+router.get("/api/users/:username/challenges/:challenge_id", getChallenge);
+
+router.delete("/api/users/:username/challenges/:challenge_id", deleteChallenge);
 
 const { PORT = 10000 } = process.env;
 app.listen(PORT, () => {
