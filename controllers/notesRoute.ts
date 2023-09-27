@@ -23,7 +23,7 @@ exports.postNote = async (req: Request, res: Response) => {
   try {
     const note = new Notes({
       _id: new mongoose.Types.ObjectId(),
-
+      note_id: new mongoose.Types.ObjectId(),
       username,
       date: newDate,
       body,

@@ -523,6 +523,7 @@ describe("/api/users/:username/notes", () => {
         expect(response.body.notes[0]).toHaveProperty("_id");
         expect(response.body.notes[0]).toHaveProperty("date");
         expect(response.body.notes[0]).toHaveProperty("body");
+        expect(response.body.notes[0]).toHaveProperty("note_id");
       });
   });
   test("GET:404 sends a not found message for non-existant username", () => {
@@ -541,6 +542,7 @@ describe("/api/users/:username/notes", () => {
       .expect(201)
       .then((response: any) => {
         expect(response.body.newNote).toHaveProperty("username");
+        expect(response.body.newNote).toHaveProperty("note_id");
         expect(response.body.newNote).toHaveProperty("_id");
         expect(response.body.newNote).toHaveProperty("date");
         expect(response.body.newNote.body).toEqual(
@@ -622,43 +624,37 @@ describe("/api/users/:username/challenges", () => {
   });
 });
 
-describe("/api/users/:username/notes/:note_id", ()=>{
-  test.todo("PATCH:201 updates a note body");
-  
-})
-describe("/api/users/:username/challenges/:challenge_id", () => {
-  test("GET: 200 gets a single challenge by challenge_id", () => {
+describe("/api/users/:username/notes/:note_id", () => {
+  test("PATCH:201 updates a note body", () => {
     return request(app)
-      .get("/api/users/user1/challenges/c1")
-      .expect(200)
+      .patch(`/api/users/user1/notes/n1`)
+      .send({ note_body: "update note test" })
+      .expect(201)
       .then((response: any) => {
-        expect(response.body.challenge).toHaveProperty("challenge_name");
-        expect(response.body.challenge).toHaveProperty("_id");
-        expect(response.body.challenge).toHaveProperty("start_date");
-        expect(response.body.challenge).toHaveProperty("end_date");
-        expect(response.body.challenge).toHaveProperty("pass_requirement");
-        expect(response.body.challenge).toHaveProperty("habits_tracked");
-        expect(response.body.challenge).toHaveProperty("description");
-        expect(response.body.challenge).toHaveProperty("username");
+        const newNote = response.body;
+        expect(newNote.username).toBe("user1");
+        expect(newNote.note_id).toBe("n1");
+        expect(newNote.body).toBe("update note test");
       });
-  })
-  test("GET:404 sends a not found message for non-existant username", () => {
+  });
+  test("PATCH:400 no note sent", () => {
     return request(app)
-      .get("/api/users/banana/challenges")
+      .patch(`/api/users/user1/notes/n1`)
+      .send({ note_body: "  " })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("No note body provided");
+      });
+  });
+  test("PATCH:404 given a non-existent note id", () => {
+    return request(app)
+      .patch(`/api/users/user1/notes/n100`)
+      .send({ note_body: "update note test" })
       .expect(404)
       .then((response: any) => {
-        expect(response.body.msg).toEqual("User Not Found");
+        expect(response.body.msg).toBe("No such note exists");
       });
   });
-  test("DELETE: 204 deletes the given challenge by_id and sends no body back", () => {
-    return request(app).delete("/api/users/user2/challenges/c2").expect(204);
-  });
-  test("DELETE: 404 responds with appropriate error message when given non-existent id", () => {
-    return request(app)
-      .delete("/api/users/user2/challenges/blabla")
-      .expect(404)
-      .then((res: any) => {
-        expect(res.body.msg).toBe("Challenge not found");
-      });
-  });
+  test.todo("DELETE:204 deletes a note");
+  test.todo("DELETE:404 given a non-existent note id");
 });
