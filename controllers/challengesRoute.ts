@@ -48,3 +48,35 @@ exports.postChallenge = async (req: Request, res: Response) => {
     }
   }
 };
+exports.getChallenge = async (req: Request, res: Response) => {
+  const { username, challenge_id } = req.params;
+
+  try {
+    const challenges = await Challenges.find({ username });
+    const singleChallenge = challenges.find(
+      (challenge: { challenge_id: string }) =>
+        challenge.challenge_id === challenge_id
+    );
+    res.json({ challenge: singleChallenge });
+  } catch (err: any) {
+    res.status(500).json({ msg: "error" });
+  }
+};
+exports.deleteChallenge = async (req: any, res: any) => {
+  const { username, challenge_id } = req.params;
+  try {
+    const challengeToDelete = await Challenges.findOne({
+      username,
+      challenge_id,
+    });
+    if (!challengeToDelete) {
+      return res.status(404).json({ msg: "Challenge not found" });
+    }
+    await Challenges.deleteOne({
+      challenge_id: challengeToDelete.challenge_id,
+    });
+    res.status(204).json();
+  } catch (err: any) {
+    res.status(400).json({ msg: "Bad Request" });
+  }
+};

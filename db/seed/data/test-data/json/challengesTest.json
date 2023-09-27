@@ -6,16 +6,18 @@
     "description": "Join the 30-day fitness challenge and get in shape!",
     "username": "user1",
     "pass_requirement": 75,
-    "habits_tracked": ["h1"]
+    "habits_tracked": ["h1"],
+    "challenge_id": "c1"
   },
   {
     "challenge_name": "Readathon",
     "start_date": "2023-10-05",
     "end_date": "2023-10-25",
     "description": "Read as many books as you can in 3 weeks.",
-    "username": "user1",
+    "username": "user2",
     "pass_requirement": 80,
-    "habits_tracked": ["h2"]
+    "habits_tracked": ["h2"],
+    "challenge_id": "c2"
   },
   {
     "challenge_name": "Meditation Challenge",
@@ -24,7 +26,8 @@
     "description": "Meditate daily for 10 minutes and find inner peace.",
     "username": "user3",
     "pass_requirement": 90,
-    "habits_tracked": ["h3"]
+    "habits_tracked": ["h3"],
+    "challenge_id": "c3"
   },
   {
     "challenge_name": "Coding Bootcamp",
@@ -33,7 +36,8 @@
     "description": "Intensive coding bootcamp to level up your programming skills.",
     "username": "user4",
     "pass_requirement": 85,
-    "habits_tracked": ["h4"]
+    "habits_tracked": ["h4"],
+    "challenge_id": "c4"
   },
   {
     "challenge_name": "Healthy Eating Challenge",
@@ -42,7 +46,8 @@
     "description": "Eat clean and maintain a healthy diet for a month.",
     "username": "user5",
     "pass_requirement": 70,
-    "habits_tracked": ["h5"]
+    "habits_tracked": ["h5"],
+    "challenge_id": "c5"
   },
   {
     "challenge_name": "Yoga Challenge",
@@ -51,7 +56,8 @@
     "description": "Practice yoga every day for a month to improve flexibility.",
     "username": "user6",
     "pass_requirement": 95,
-    "habits_tracked": ["h6"]
+    "habits_tracked": ["h6"],
+    "challenge_id": "c6"
   },
   {
     "challenge_name": "Writing Marathon",
@@ -60,7 +66,8 @@
     "description": "Write creatively and complete your novel in 3 weeks.",
     "username": "user7",
     "pass_requirement": 80,
-    "habits_tracked": ["h7"]
+    "habits_tracked": ["h7"],
+    "challenge_id": "c7"
   },
   {
     "challenge_name": "Master Chef Challenge",
@@ -69,7 +76,8 @@
     "description": "Learn to cook gourmet dishes and impress your friends.",
     "username": "user8",
     "pass_requirement": 75,
-    "habits_tracked": ["h8"]
+    "habits_tracked": ["h8"],
+    "challenge_id": "c8"
   },
   {
     "challenge_name": "Productivity Sprint",
@@ -78,7 +86,8 @@
     "description": "Boost your productivity and achieve your goals.",
     "username": "user9",
     "pass_requirement": 90,
-    "habits_tracked": ["h9"]
+    "habits_tracked": ["h9"],
+    "challenge_id": "c9"
   },
   {
     "challenge_name": "Language Learning Challenge",
@@ -87,6 +96,7 @@
     "description": "Learn a new language in a month through daily practice.",
     "username": "user1",
     "pass_requirement": 85,
-    "habits_tracked": ["h10"]
+    "habits_tracked": ["h10"],
+    "challenge_id": "c10"
   }
 ]
