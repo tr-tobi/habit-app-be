@@ -3,6 +3,7 @@ var usersSchema = require("../../models/usersSchema");
 var completionSchema = require("../../models/habit-completion");
 var habitsSchema = require("../../models/habitsSchema");
 var notesSchema = require("../../models/notesSchema");
+var challengesSchema = require("../../models/challengesSchema");
 
 var Users = mongoose.model("Users", usersSchema);
 var Completion = mongoose.model(
@@ -12,6 +13,7 @@ var Completion = mongoose.model(
 );
 var Habits = mongoose.model("Habits", habitsSchema);
 var Notes = mongoose.model("Notes", notesSchema);
+var Challenges = mongoose.model("Challenges", challengesSchema);
 
 exports.insertUsers = async (usersData: any) => {
   try {
@@ -40,6 +42,14 @@ exports.insertHabits = async (habitsData: any) => {
 exports.insertNotes = async (notesData: any) => {
   try {
     await Notes.insertMany(notesData);
+  } catch (error) {
+    console.error("Error inserting users:", error);
+  }
+};
+
+exports.insertChallenges = async (challengesData: any) => {
+  try {
+    await Challenges.insertMany(challengesData);
   } catch (error) {
     console.error("Error inserting users:", error);
   }
