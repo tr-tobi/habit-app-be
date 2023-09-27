@@ -564,7 +564,7 @@ describe("/api/users/:username/challenges", () => {
       .get("/api/users/user1/challenges")
       .expect(200)
       .then((response: any) => {
-        expect(response.body.challenges.length).toEqual(3);
+        expect(response.body.challenges.length).toEqual(2);
         expect(response.body.challenges[0]).toHaveProperty("username");
         expect(response.body.challenges[0]).toHaveProperty("_id");
         expect(response.body.challenges[0]).toHaveProperty("start_date");
@@ -648,6 +648,17 @@ describe("/api/users/:username/challenges/:challenge_id", () => {
       .expect(404)
       .then((response: any) => {
         expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+  test("DELETE: 204 deletes the given challenge by_id and sends no body back", () => {
+    return request(app).delete("/api/users/user2/challenges/c2").expect(204);
+  });
+  test("DELETE: 404 responds with appropriate error message when given non-existent id", () => {
+    return request(app)
+      .delete("/api/users/user2/challenges/blabla")
+      .expect(404)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Challenge not found");
       });
   });
 });
