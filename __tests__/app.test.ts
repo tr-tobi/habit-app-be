@@ -299,7 +299,6 @@ describe("/api/users/:username/habit_completion/:date", () => {
   });
   test("POST: 201 obj contains correct properties for post request", () => {
     const newHabit: object = {
-      username: "user1",
       completed: "true",
       habit_id: new mongoose.Types.ObjectId(),
     };
@@ -580,6 +579,7 @@ describe("/api/users/:username/challenges", () => {
       .expect(200)
       .then((response: any) => {
         expect(response.body.challenges.length).toEqual(2);
+        expect(response.body.challenges[0]).toHaveProperty("challenge_id");
         expect(response.body.challenges[0]).toHaveProperty("username");
         expect(response.body.challenges[0]).toHaveProperty("_id");
         expect(response.body.challenges[0]).toHaveProperty("start_date");
@@ -665,11 +665,20 @@ describe("/api/users/:username/notes/:note_id", () => {
       .send({ note_body: "update note test" })
       .expect(404)
       .then((response: any) => {
-        expect(response.body.msg).toBe("No such note exists");
+        expect(response.body.msg).toBe("Note not found");
       });
   });
-  test.todo("DELETE:204 deletes a note");
-  test.todo("DELETE:404 given a non-existent note id");
+  test("DELETE:204 deletes a note", () => {
+    return request(app).delete(`/api/users/user1/notes/n1`).expect(204);
+  });
+  test("DELETE:404 given a non-existent note id", () => {
+    return request(app)
+      .delete(`/api/users/user1/notes/n100`)
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Note not found");
+      });
+  });
 });
 describe("/api/users/:username/challenges/:challenge_id", () => {
   test("GET: 200 gets a single challenge by challenge_id", () => {
@@ -686,7 +695,7 @@ describe("/api/users/:username/challenges/:challenge_id", () => {
         expect(response.body.challenge).toHaveProperty("description");
         expect(response.body.challenge).toHaveProperty("username");
       });
-  })
+  });
   test("GET:404 sends a not found message for non-existant username", () => {
     return request(app)
       .get("/api/users/banana/challenges")

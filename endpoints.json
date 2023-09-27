@@ -128,7 +128,6 @@
     "description": "Creates a new habit_completion object",
     "queries": [],
     "exampleRequest": {
-      "username": "user1",
       "completed": "true",
       "habit_id": "65115d335ae939e57ab6e2a2"
     },
@@ -316,6 +315,7 @@
       "challenges": [
         {
           "_id": "6513fe0b87c52d8b5aeef172",
+          "challenge_id": "c1",
           "challenge_name": "Fitness Challenge",
           "start_date": "2023-10-01",
           "end_date": "2023-10-31",
@@ -328,6 +328,7 @@
         {
           "_id": "6513fe0b87c52d8b5aeef173",
           "challenge_name": "Readathon",
+          "challenge_id": "c4",
           "start_date": "2023-10-05",
           "end_date": "2023-10-25",
           "description": "Read as many books as you can in 3 weeks.",
@@ -353,6 +354,7 @@
     "exampleResponse": {
       "newChallenge": {
         "challenge_name": "Read for a whole month",
+        "challenge_id": "c12",
         "start_date": "2023-09-30",
         "end_date": "2023-10-30",
         "description": "Read for 1 hour every day for the next 30 days",
@@ -386,6 +388,25 @@
   "DELETE /api/users/:username/challenges/:challenge_id": {
     "description": "deletes the given challenge by challenge_id",
     "queries": [],
+    "exampleResponse": {}
+  },
+  "PATCH /api/users/:username/notes/:note_id": {
+    "description": "update a specific note by note id",
+    "queries": [],
+    "exampleRequest": { "note_body": "sample note" },
+    "exampleResponse": {
+      "_id": "6514443156b65fa8bee1eec6",
+      "note_id": "n1",
+      "username": "user1",
+      "date": "2023-09-16",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "__v": 0
+    }
+  },
+  "DELETE /api/users/:username/notes/:note_id": {
+    "description": "deletes the given note by note_id",
+    "queries": [],
+    "exampleRequest": {},
     "exampleResponse": {}
   }
 }
