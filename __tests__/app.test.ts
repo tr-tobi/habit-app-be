@@ -472,7 +472,7 @@ describe("/api/users/:username/habits/:habit_id", () => {
     return request(app)
     .get("/api/users/user2/habits/h4")
     .expect(200)
-    .then((res:any) => { console.log(res.body, "test")
+    .then((res:any) => {
       expect(res.body.habit).toHaveProperty("habit_id");
       expect(res.body.habit).toHaveProperty("date");
       expect(res.body.habit).toHaveProperty("habit_name");
