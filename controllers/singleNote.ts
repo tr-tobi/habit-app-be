@@ -10,7 +10,7 @@ exports.patchNote = async (req: Request, res: Response) => {
   try {
     const currentNote = await Notes.findOne({ note_id: note_id });
     if (currentNote === null) {
-      return res.status(404).json({ msg: "No such note exists" });
+      return res.status(404).json({ msg: "Note not found" });
     }
 
     if (note_body === null || /^\s*$/.test(note_body)) {
@@ -30,17 +30,16 @@ exports.patchNote = async (req: Request, res: Response) => {
 
 exports.deleteNote = async (req: Request, res: Response) => {
   const { username, note_id } = req.params;
-
   const note = await Notes.find({ note_id: note_id });
 
-  if (note.length != 0) {
-    try {
-      await Notes.deleteOne({ _id: note_id });
-      res.status(204).json();
-    } catch (err: any) {
-      res.status(500).json({ msg: "Internal Server Error" });
+  try {
+    if (note.length === 0) {
+      return res.status(404).json({ msg: "Note not found" });
     }
-  } else {
-    return res.status(404).json({ msg: "Note not found" });
+
+    await Notes.deleteOne({ note_id: note_id });
+    res.status(204).json();
+  } catch (err: any) {
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
