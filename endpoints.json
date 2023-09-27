@@ -300,6 +300,7 @@
       "challenges": [
         {
           "_id": "6513fe0b87c52d8b5aeef172",
+          "challenge_id": "c1",
           "challenge_name": "Fitness Challenge",
           "start_date": "2023-10-01",
           "end_date": "2023-10-31",
@@ -312,6 +313,7 @@
         {
           "_id": "6513fe0b87c52d8b5aeef173",
           "challenge_name": "Readathon",
+          "challenge_id": "c4",
           "start_date": "2023-10-05",
           "end_date": "2023-10-25",
           "description": "Read as many books as you can in 3 weeks.",
@@ -337,6 +339,7 @@
     "exampleResponse": {
       "newChallenge": {
         "challenge_name": "Read for a whole month",
+        "challenge_id": "c12",
         "start_date": "2023-09-30",
         "end_date": "2023-10-30",
         "description": "Read for 1 hour every day for the next 30 days",
