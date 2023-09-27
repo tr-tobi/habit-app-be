@@ -2,7 +2,7 @@ var express = require("express");
 require("dotenv").config();
 import mongoose from "mongoose";
 var router = express.Router();
-const { getAllHabits, postHabit,patchHabit, deleteHabit } = require("./controllers/habitsRoute");
+const { getAllHabits, getHabit, postHabit, patchHabit, deleteHabit } = require("./controllers/habitsRoute");
 
 const { getAllNotes, postNote } = require("./controllers/notesRoute");
 const { DATABASE_URL } = require("./connection");
@@ -88,6 +88,8 @@ router.get("/api/categories/:username", getCategories);
 router.post("/api/categories/:username", postCategory);
 
 router.get("/api/users/:username/habits", getAllHabits);
+
+router.get("/api/users/:username/habits/:habit_id", getHabit);
 
 router.post("/api/users/:username/habits", postHabit);
 

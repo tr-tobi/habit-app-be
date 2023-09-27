@@ -3,14 +3,39 @@ var mongoose = require("mongoose");
 var router = express.Router();
 
 var habitsSchema = require("../models/habitsSchema");
+var usersSchema = require("../models/usersSchema");
 
 var Habits = mongoose.model("Habits", habitsSchema);
+var Users = mongoose.model("Users", usersSchema);
 
 exports.getAllHabits = async (req: any, res: any) => {
   try {
     const habits = await Habits.find();
-    res.json({ habits: habits });
+    res.status(200).json({ habits: habits });
   } catch (err) {
+    res.status(500).json({ msg: "error" });
+  }
+};
+exports.getHabit = async (req: any, res: any) => {
+  const { username, habit_id } = req.params;
+
+  try {
+    const user = await Users.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    if (Array.isArray(user.habits) && user.habits.includes(habit_id)) {
+      const habit = await Habits.findOne({ habit_id });
+      console.log(habit);
+      if (!habit) {
+        return res.status(404).json({ msg: "Habit not found" });
+      }
+      res.status(200).json({ habit: habit });
+    } else {
+      res.status(404).json({ msg: "Habit not found for this user" });
+    }
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ msg: "error" });
   }
 };
