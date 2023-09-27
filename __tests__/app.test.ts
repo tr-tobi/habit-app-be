@@ -558,9 +558,8 @@ describe("/api/users/:username/notes", () => {
       });
   });
 });
-
 describe("/api/users/:username/challenges", () => {
-  test("GET: 200 gets list of all notes made by a user", () => {
+  test("GET: 200 gets list of all challenges made by a user", () => {
     return request(app)
       .get("/api/users/user1/challenges")
       .expect(200)
@@ -623,8 +622,32 @@ describe("/api/users/:username/challenges", () => {
   });
 });
 
-
 describe("/api/users/:username/notes/:note_id", ()=>{
-  test("PATCH:201 updates a note body");
+  test.todo("PATCH:201 updates a note body");
   
 })
+describe("/api/users/:username/challenges/:challenge_id", () => {
+  test("GET: 200 gets a single challenge by challenge_id", () => {
+    return request(app)
+      .get("/api/users/user1/challenges/c1")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.challenge).toHaveProperty("challenge_name");
+        expect(response.body.challenge).toHaveProperty("_id");
+        expect(response.body.challenge).toHaveProperty("start_date");
+        expect(response.body.challenge).toHaveProperty("end_date");
+        expect(response.body.challenge).toHaveProperty("pass_requirement");
+        expect(response.body.challenge).toHaveProperty("habits_tracked");
+        expect(response.body.challenge).toHaveProperty("description");
+        expect(response.body.challenge).toHaveProperty("username");
+      });
+  })
+  test("GET:404 sends a not found message for non-existant username", () => {
+    return request(app)
+      .get("/api/users/banana/challenges")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+});
