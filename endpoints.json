@@ -128,7 +128,6 @@
     "description": "Creates a new habit_completion object",
     "queries": [],
     "exampleRequest": {
-      "username": "user1",
       "completed": "true",
       "habit_id": "65115d335ae939e57ab6e2a2"
     },
