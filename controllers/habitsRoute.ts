@@ -35,7 +35,6 @@ exports.getHabit = async (req: any, res: any) => {
       res.status(404).json({ msg: "Habit not found for this user" });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({ msg: "error" });
   }
 };
