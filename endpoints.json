@@ -254,21 +254,24 @@
           "username": "user2",
           "date": "2023-09-18",
           "body": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
-          "__v": 0
+          "__v": 0,
+          "notes_id": "n3"
         },
         {
           "_id": "6513f7ac894ef2c5a8cf9026",
           "username": "user2",
           "date": "2023-09-19",
           "body": "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam.",
-          "__v": 0
+          "__v": 0,
+          "notes_id": "n4"
         },
         {
           "_id": "6513f7ac894ef2c5a8cf902c",
           "username": "user2",
           "date": "2023-09-27",
           "body": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.",
-          "__v": 0
+          "__v": 0,
+          "notes_id": "n5"
         }
       ]
     }
@@ -285,7 +288,8 @@
         "date": "2023-09-27",
         "body": "This is a test for the notes body",
         "_id": "6513fc4253b292189d19226d",
-        "__v": 0
+        "__v": 0,
+        "notes_id": "n12"
       }
     }
   },
