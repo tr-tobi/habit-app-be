@@ -218,6 +218,22 @@
       ]
     }
   },
+  "GET /api/users/:username/habits/:habit_id": {
+    "description": "serves an array of user habits",
+    "queries": [],
+    "exampleResponse": {
+      "habit": 
+        {
+          "_id": "h1",
+          "date": "2023-09-19",
+          "habit_name": "Morning Run",
+          "habit_category": "Fitness",
+          "description": "Go for a 30-minute run every morning.",
+          "occurrence": ["Monday", "Wednesday", "Friday"],
+          "habit_id": "h4"
+        }
+    }
+  },
   "PATCH /api/users/:username/habits/:habit_id": {
     "description": "updates a habit by id",
     "queries": [],
