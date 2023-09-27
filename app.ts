@@ -18,6 +18,7 @@ const {
 } = require("./controllers/habitCompletionRoute");
 
 const { getCategories, postCategory } = require("./controllers/categories");
+const { patchNote, deleteNote } = require("./controllers/singleNote");
 const {
   getUser,
   getAllUsers,
@@ -101,6 +102,11 @@ router.post("/api/users/:username/notes", getUser, postNote);
 router.get("/api/users/:username/challenges", getUser, getChallenges);
 
 router.post("/api/users/:username/challenges", getUser, postChallenge);
+
+router.patch("/api/users/:username/notes/:note_id", patchNote);
+
+router.delete("/api/users/:username/notes/:note_id", deleteNote);
+
 
 const { PORT = 10000 } = process.env;
 app.listen(PORT, () => {
