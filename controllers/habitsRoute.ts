@@ -26,7 +26,7 @@ exports.getHabit = async (req: any, res: any) => {
     }
     if (Array.isArray(user.habits) && user.habits.includes(habit_id)) {
       const habit = await Habits.findOne({ habit_id });
-      console.log(habit);
+
       if (!habit) {
         return res.status(404).json({ msg: "Habit not found" });
       }
