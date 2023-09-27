@@ -3,35 +3,35 @@ const { DATABASE_URL } = require("../connection");
 
 mongoose.connect(DATABASE_URL);
 
-var usersSchema = new mongoose.Schema({
+var challengesSchema = new mongoose.Schema({
+  challenge_name: {
+    type: String,
+    required: true,
+  },
+  start_date: {
+    type: String,
+    required: true,
+  },
+  end_date: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,
   },
-  email: {
-    type: String,
+  pass_requirement: {
+    type: Number,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  habit_categories: {
-    type: Array,
-    required: true,
-  },
-  challenges: {
-    type: Array,
-    required: true,
-  },
-  habits: {
-    type: Array,
-    required: true,
-  },
-  notes: {
+  habits_tracked: {
     type: Array,
     required: true,
   },
 });
 
-module.exports = usersSchema;
+module.exports = challengesSchema;

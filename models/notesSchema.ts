@@ -8,7 +8,7 @@ var notesSchema = new mongoose.Schema({
   note_id: { type: Schema.Types.Mixed, default: mongoose.Types.ObjectId },
   username: {
     type: String,
-    required: false,
+    required: true,
   },
   date: {
     type: String,

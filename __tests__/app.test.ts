@@ -12,10 +12,12 @@ var {
   insertCompletion,
   insertHabits,
   insertNotes,
+  insertChallenges,
 } = require("../db/seed/run-seed");
 const completionJson = require("../db/seed/data/test-data/json/test.habit_completion.json");
 const habitsJson = require("../db/seed/data/test-data/json/test.habits.json");
 const notesJson = require("../db/seed/data/test-data/json/notesTest.json");
+const challengesJson = require("../db/seed/data/test-data/json/challengesTest.json");
 var endpoints = require("../endpoints.json");
 
 let session: any;
@@ -27,12 +29,14 @@ beforeEach(async () => {
   await mongoose.connection.collection("habit_completion").deleteMany({});
   await mongoose.connection.collection("habits").deleteMany({});
   await mongoose.connection.collection("notes").deleteMany({});
+  await mongoose.connection.collection("challenges").deleteMany({});
 
   await Promise.all([
     insertUsers(usersJson),
     insertCompletion(completionJson),
     insertHabits(habitsJson),
     insertNotes(notesJson),
+    insertChallenges(challengesJson),
   ]);
 });
 
@@ -542,6 +546,79 @@ describe("/api/users/:username/notes", () => {
         expect(response.body.newNote.body).toEqual(
           "This is a test for the notes body"
         );
+      });
+  });
+  test("POST:400 request contains no body property", () => {
+    return request(app)
+      .post("/api/users/user2/notes")
+      .send({ noBody: "  " })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Bad Request");
+      });
+  });
+});
+
+describe("/api/users/:username/challenges", () => {
+  test("GET: 200 gets list of all notes made by a user", () => {
+    return request(app)
+      .get("/api/users/user1/challenges")
+      .expect(200)
+      .then((response: any) => {
+        expect(response.body.challenges.length).toEqual(3);
+        expect(response.body.challenges[0]).toHaveProperty("username");
+        expect(response.body.challenges[0]).toHaveProperty("_id");
+        expect(response.body.challenges[0]).toHaveProperty("start_date");
+        expect(response.body.challenges[0]).toHaveProperty("end_date");
+        expect(response.body.challenges[0]).toHaveProperty("pass_requirement");
+        expect(response.body.challenges[0]).toHaveProperty("habits_tracked");
+        expect(response.body.challenges[0]).toHaveProperty("description");
+      });
+  });
+  test("GET:404 sends a not found message for non-existant username", () => {
+    return request(app)
+      .get("/api/users/banana/challenges")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+  test("POST: 201 adds a new note to a users notes list", () => {
+    const reqObj = {
+      challenge_name: "Read for a whole month",
+      start_date: "2023-09-30",
+      end_date: "2023-10-30",
+      description: "Read for 1 hour every day for the next 30 days",
+      pass_requirement: 80,
+      habits_tracked: ["h1"],
+    };
+    return request(app)
+      .post("/api/users/user1/challenges")
+      .send(reqObj)
+      .expect(201)
+      .then((response: any) => {
+        expect(response.body.newChallenge.username).toEqual("user1");
+        expect(response.body.newChallenge.challenge_name).toEqual(
+          "Read for a whole month"
+        );
+        expect(response.body.newChallenge).toHaveProperty("_id");
+
+        expect(response.body.newChallenge.start_date).toEqual("2023-09-30");
+        expect(response.body.newChallenge.end_date).toEqual("2023-10-30");
+        expect(response.body.newChallenge.pass_requirement).toEqual(80);
+        expect(response.body.newChallenge.habits_tracked).toEqual(["h1"]);
+        expect(response.body.newChallenge.description).toEqual(
+          "Read for 1 hour every day for the next 30 days"
+        );
+      });
+  });
+  test("POST:400 request contains no body property", () => {
+    return request(app)
+      .post("/api/users/user1/challenges")
+      .send({ noBody: "  " })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("Bad Request");
       });
   });
 });

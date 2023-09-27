@@ -178,22 +178,24 @@
     "description": "serves an array of user habits",
     "queries": [],
     "exampleResponse": {
-      "habits": [  {
-        "_id": "h1",
-        "date": "2023-09-19",
-        "habit_name": "Morning Run",
-        "habit_category": "Fitness",
-        "description": "Go for a 30-minute run every morning.",
-        "occurrence": ["Monday", "Wednesday", "Friday"]
-      },
-      {
-        "_id": "h2",
-        "date": "2023-09-20",
-        "habit_name": "Read a Book",
-        "habit_category": "Reading",
-        "description": "Read at least one chapter of a book every evening.",
-        "occurrence": ["Tuesday", "Thursday", "Saturday"]
-      }]
+      "habits": [
+        {
+          "_id": "h1",
+          "date": "2023-09-19",
+          "habit_name": "Morning Run",
+          "habit_category": "Fitness",
+          "description": "Go for a 30-minute run every morning.",
+          "occurrence": ["Monday", "Wednesday", "Friday"]
+        },
+        {
+          "_id": "h2",
+          "date": "2023-09-20",
+          "habit_name": "Read a Book",
+          "habit_category": "Reading",
+          "description": "Read at least one chapter of a book every evening.",
+          "occurrence": ["Tuesday", "Thursday", "Saturday"]
+        }
+      ]
     }
   },
   "POST /api/users/:username/habits": {
@@ -203,33 +205,143 @@
       "habit_name": "Paint",
       "habit_category": "Mindfulness",
       "description": "Paint every evening.",
-      "occurrence": ["Daily"] },
+      "occurrence": ["Daily"]
+    },
     "exampleResponse": {
-      "habit": [{
-        "habit_name": "Paint",
-        "habit_category": "Mindfulness",
-        "description": "Paint every evening.",
-        "occurrence": ["Daily"] }]
+      "habit": [
+        {
+          "habit_name": "Paint",
+          "habit_category": "Mindfulness",
+          "description": "Paint every evening.",
+          "occurrence": ["Daily"]
+        }
+      ]
     }
   },
   "PATCH /api/users/:username/habits/:habit_id": {
     "description": "updates a habit by id",
     "queries": [],
     "exampleRequest": {
-      "habit": [{
-        "occurrence": ["Daily"] }]
+      "habit": [
+        {
+          "occurrence": ["Daily"]
+        }
+      ]
     },
     "exampleResponse": {
-      "habit": [{
-        "habit_name": "Sleep",
-        "habit_category": "Mindfulness",
-        "description": "Sleep every evening.",
-        "occurrence": ["Daily"] }]
+      "habit": [
+        {
+          "habit_name": "Sleep",
+          "habit_category": "Mindfulness",
+          "description": "Sleep every evening.",
+          "occurrence": ["Daily"]
+        }
+      ]
     }
   },
   "DELETE /api/users/:username/habits/:habit_id": {
     "description": "deletes the given habit by_id",
     "queries": [],
     "exampleResponse": { "msg": "Habit Deleted" }
+  },
+  "GET /api/users/:username/notes": {
+    "description": "serves an array of notes by user",
+    "queries": [],
+    "exampleResponse": {
+      "notes": [
+        {
+          "_id": "6513f7ac894ef2c5a8cf9025",
+          "username": "user2",
+          "date": "2023-09-18",
+          "body": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+          "__v": 0
+        },
+        {
+          "_id": "6513f7ac894ef2c5a8cf9026",
+          "username": "user2",
+          "date": "2023-09-19",
+          "body": "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam.",
+          "__v": 0
+        },
+        {
+          "_id": "6513f7ac894ef2c5a8cf902c",
+          "username": "user2",
+          "date": "2023-09-27",
+          "body": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.",
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "POST /api/users/:username/notes": {
+    "description": "post a new notes for a user",
+    "queries": [],
+    "exampleRequest": {
+      "body": "This is an example body"
+    },
+    "exampleResponse": {
+      "newNote": {
+        "username": "user2",
+        "date": "2023-09-27",
+        "body": "This is a test for the notes body",
+        "_id": "6513fc4253b292189d19226d",
+        "__v": 0
+      }
+    }
+  },
+  "GET /api/users/:username/challenges": {
+    "description": "serves an array of notes by user",
+    "queries": [],
+    "exampleResponse": {
+      "challenges": [
+        {
+          "_id": "6513fe0b87c52d8b5aeef172",
+          "challenge_name": "Fitness Challenge",
+          "start_date": "2023-10-01",
+          "end_date": "2023-10-31",
+          "description": "Join the 30-day fitness challenge and get in shape!",
+          "username": "user1",
+          "pass_requirement": 75,
+          "habits_tracked": ["h1"],
+          "__v": 0
+        },
+        {
+          "_id": "6513fe0b87c52d8b5aeef173",
+          "challenge_name": "Readathon",
+          "start_date": "2023-10-05",
+          "end_date": "2023-10-25",
+          "description": "Read as many books as you can in 3 weeks.",
+          "username": "user1",
+          "pass_requirement": 80,
+          "habits_tracked": ["h2"],
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "POST /api/users/:username/challenges": {
+    "description": "post a new challenge for a user",
+    "queries": [],
+    "exampleRequest": {
+      "challenge_name": "Read for a whole month",
+      "start_date": "2023-09-30",
+      "end_date": "2023-10-30",
+      "description": "Read for 1 hour every day for the next 30 days",
+      "pass_requirement": 80,
+      "habits_tracked": ["h1"]
+    },
+    "exampleResponse": {
+      "newChallenge": {
+        "challenge_name": "Read for a whole month",
+        "start_date": "2023-09-30",
+        "end_date": "2023-10-30",
+        "description": "Read for 1 hour every day for the next 30 days",
+        "username": "user1",
+        "pass_requirement": 80,
+        "habits_tracked": ["h1"],
+        "_id": "6513ffd0d6bbe7d16e634b7f",
+        "__v": 0
+      }
+    }
   }
 }
