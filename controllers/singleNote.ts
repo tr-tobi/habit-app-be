@@ -1,4 +1,7 @@
 import { Request, Response } from "express";
+var mongoose = require("mongoose");
+var notesSchema = require("../models/notesSchema");
+var Notes = mongoose.model("Notes", notesSchema);
 
 exports.patchNote = async (req: Request, res: Response) => {
   const { username, note_id } = req.params;
@@ -6,7 +9,7 @@ exports.patchNote = async (req: Request, res: Response) => {
 
   if (note_body != null) {
     try {
-      const updatedNote = await Note.findOneAndUpdate(
+      const updatedNote = await Notes.findOneAndUpdate(
         { note_id },
         { $set: { body: note_body } }
       );
@@ -21,11 +24,11 @@ exports.patchNote = async (req: Request, res: Response) => {
 
 exports.deleteNote = async (req: Request, res: Response) => {
   const { username, note_id } = req.params;
-  const note = await Note.find({ note_id: note_id });
+  const note = await Notes.find({ note_id: note_id });
 
   if (note.length != 0) {
     try {
-      await Note.deleteOne({ note_id: note_id });
+      await Notes.deleteOne({ note_id: note_id });
       res.status(204).json();
     } catch (err: any) {
       res.status(500).json({ msg: "Internal Server Error" });

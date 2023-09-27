@@ -622,3 +622,9 @@ describe("/api/users/:username/challenges", () => {
       });
   });
 });
+
+
+describe("/api/users/:username/notes/:note_id", ()=>{
+  test("PATCH:201 updates a note body");
+  
+})
