@@ -567,6 +567,7 @@ describe("/api/users/:username/challenges", () => {
       .expect(200)
       .then((response: any) => {
         expect(response.body.challenges.length).toEqual(2);
+        expect(response.body.challenges[0]).toHaveProperty("challenge_id");
         expect(response.body.challenges[0]).toHaveProperty("username");
         expect(response.body.challenges[0]).toHaveProperty("_id");
         expect(response.body.challenges[0]).toHaveProperty("start_date");
@@ -673,7 +674,7 @@ describe("/api/users/:username/challenges/:challenge_id", () => {
         expect(response.body.challenge).toHaveProperty("description");
         expect(response.body.challenge).toHaveProperty("username");
       });
-  })
+  });
   test("GET:404 sends a not found message for non-existant username", () => {
     return request(app)
       .get("/api/users/banana/challenges")
