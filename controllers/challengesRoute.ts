@@ -28,6 +28,7 @@ exports.postChallenge = async (req: Request, res: Response) => {
   try {
     const challenge = new Challenges({
       _id: new mongoose.Types.ObjectId(),
+      challenge_id: new mongoose.Types.ObjectId(),
       challenge_name,
       start_date,
       end_date,
