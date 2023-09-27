@@ -240,9 +240,9 @@
     }
   },
   "DELETE /api/users/:username/habits/:habit_id": {
-    "description": "deletes the given habit by_id",
+    "description": "deletes the given habit by habit_id",
     "queries": [],
-    "exampleResponse": { "msg": "Habit Deleted" }
+    "exampleResponse": {}
   },
   "GET /api/users/:username/notes": {
     "description": "serves an array of notes by user",
@@ -347,5 +347,29 @@
         "__v": 0
       }
     }
+  },
+  "GET /api/users/:username/challenges/:challenge_id": {
+    "description": "serves a single challenge by challenge_id",
+    "queries": [],
+    "exampleResponse": {
+      "challenge": [
+        {
+          "_id": "6513fe0b87c52d8b5aeef172",
+          "challenge_name": "Fitness Challenge",
+          "start_date": "2023-10-01",
+          "end_date": "2023-10-31",
+          "description": "Join the 30-day fitness challenge and get in shape!",
+          "username": "user1",
+          "pass_requirement": 75,
+          "habits_tracked": ["h1"],
+          "__v": 0
+        }
+      ]
+    }
+  },
+  "DELETE /api/users/:username/challenges/:challenge_id": {
+    "description": "deletes the given challenge by challenge_id",
+    "queries": [],
+    "exampleResponse": {}
   }
 }
