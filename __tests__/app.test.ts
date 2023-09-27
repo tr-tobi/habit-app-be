@@ -546,8 +546,37 @@ describe("/api/users/:username/notes", () => {
   });
 });
 
-
-describe("/api/users/:username/notes/:note_id", ()=>{
-  test("PATCH:201 updates a note body");
-  
-})
+describe.only("/api/users/:username/notes/:note_id", () => {
+  test("PATCH:201 updates a note body", () => {
+    return request(app)
+      .patch(`/api/users/user1/notes/n1`)
+      .send({ note_body: "update note test" })
+      .expect(201)
+      .then((response: any) => {
+        const newNote = response.body;
+        expect(newNote.username).toBe("user1");
+        expect(newNote.note_id).toBe("n1");
+        expect(newNote.body).toBe("update note test");
+      });
+  });
+  test("PATCH:400 no note sent", () => {
+    return request(app)
+      .patch(`/api/users/user1/notes/n1`)
+      .send({ note_body: "  " })
+      .expect(400)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("No note body provided");
+      });
+  });
+  test("PATCH:404 given a non-existent note id", () => {
+    return request(app)
+      .patch(`/api/users/user1/notes/n100`)
+      .send({ note_body: "update note test" })
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toBe("No such note exists");
+      });
+  });
+  test.todo("DELETE:204 deletes a note");
+  test.todo("DELETE:404 given a non-existent note id");
+});
