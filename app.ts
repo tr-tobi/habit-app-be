@@ -27,6 +27,11 @@ const {
   patchUser,
   deleteUser,
 } = require("./controllers/usersRoute");
+
+const {
+  getChallenges,
+  postChallenge,
+} = require("./controllers/challengesRoute");
 var completionSchema = require("./models/habit-completion");
 var endpoints = require("./endpoints.json");
 const cors = require("cors");
@@ -92,6 +97,10 @@ router.delete("/api/users/:username/habits/:habit_id", deleteHabit);
 router.get("/api/users/:username/notes", getUser, getAllNotes);
 
 router.post("/api/users/:username/notes", getUser, postNote);
+
+router.get("/api/users/:username/challenges", getUser, getChallenges);
+
+router.post("/api/users/:username/challenges", getUser, postChallenge);
 
 const { PORT = 10000 } = process.env;
 app.listen(PORT, () => {
