@@ -42,8 +42,6 @@ exports.postCompletion = async (req: Request, res: Response) => {
   const { completed, habit_id } = req.body;
   const { username } = req.params;
 
-  const habitId = new mongoose.Types.ObjectId();
-
   try {
     const habit = new Completion({
       date: newDate,
