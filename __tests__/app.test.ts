@@ -299,7 +299,6 @@ describe("/api/users/:username/habit_completion/:date", () => {
   });
   test("POST: 201 obj contains correct properties for post request", () => {
     const newHabit: object = {
-      username: "user1",
       completed: "true",
       habit_id: new mongoose.Types.ObjectId(),
     };

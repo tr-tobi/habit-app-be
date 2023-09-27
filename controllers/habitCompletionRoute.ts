@@ -39,7 +39,8 @@ exports.completionRes = (req: Request, res: Response) => {
 exports.postCompletion = async (req: Request, res: Response) => {
   const date = new Date();
   const newDate = date.toISOString().split("T")[0];
-  const { username, completed, habit_id } = req.body;
+  const { completed, habit_id } = req.body;
+  const { username } = req.params;
 
   const habitId = new mongoose.Types.ObjectId();
 
@@ -52,7 +53,6 @@ exports.postCompletion = async (req: Request, res: Response) => {
     });
 
     const newHabit = await habit.save();
-    newHabit.habit_id = habitId;
 
     res.status(201).json({ habit: newHabit });
   } catch (err: any) {
