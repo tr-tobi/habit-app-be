@@ -84,6 +84,8 @@ exports.postUserAuth = (req: Request, res: Response) => {
       req.body.username === res.locals.user[0].username
     ) {
       correct = true;
+    } else {
+      correct = false;
     }
   }
 
