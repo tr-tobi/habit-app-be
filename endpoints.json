@@ -373,5 +373,24 @@
     "description": "deletes the given challenge by challenge_id",
     "queries": [],
     "exampleResponse": {}
+  },
+  "PATCH /api/users/:username/notes/:note_id": {
+    "description": "update a specific note by note id",
+    "queries": [],
+    "exampleRequest": { "note_body": "sample note" },
+    "exampleResponse": {
+      "_id": "6514443156b65fa8bee1eec6",
+      "note_id": "n1",
+      "username": "user1",
+      "date": "2023-09-16",
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "__v": 0
+    }
+  },
+  "DELETE /api/users/:username/notes/:note_id": {
+    "description": "deletes the given note by note_id",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {}
   }
 }
