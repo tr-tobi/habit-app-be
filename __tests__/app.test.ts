@@ -482,6 +482,8 @@ describe("/api/habits/:username", () => {
         expect(res.body.habit).toHaveProperty("occurrence");
       });
   });
+  test("GET: sends a habit for a user", () => {
+    return request(app)
       .get("/api/habits/user5")
       .expect(200)
       .then((res: any) => {
