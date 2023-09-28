@@ -540,7 +540,7 @@ describe("/api/users/:username/habits/:habit_id", () => {
       });
   });
 });
-describe.only("/api/users/:username/habits/:habit_id", () => {
+describe("/api/users/:username/habits/:habit_id", () => {
   test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
     return request(app).delete("/api/users/user2/habits/h2").expect(204);
   });
