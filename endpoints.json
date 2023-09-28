@@ -351,11 +351,6 @@
       ]
     }
   },
-  "DELETE /api/users/:username/habits/:habit_id": {
-    "description": "deletes the given habit by habit_id",
-    "queries": [],
-    "exampleResponse": {}
-  },
   "GET /api/users/:username/notes": {
     "description": "serves an array of notes by user",
     "queries": [],
