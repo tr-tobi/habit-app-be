@@ -7,38 +7,29 @@ var usersSchema = require("../models/usersSchema");
 
 var Habits = mongoose.model("Habits", habitsSchema);
 var Users = mongoose.model("Users", usersSchema);
-
 exports.getAllHabits = async (req: any, res: any) => {
   try {
-    const habits = await Habits.find();
-    res.status(200).json({ habits: habits });
+    const habits = await Habits.find(); 
+    if (!habits || habits.length === 0) {
+      return res.status(404).json({ msg: "Habits Not Found" });
+    }
+    res.status(200).json({ habits });
   } catch (err) {
     res.status(500).json({ msg: "error" });
   }
 };
 exports.getHabit = async (req: any, res: any) => {
-  const { username, habit_id } = req.params;
-
+  const { username } = req.params;
   try {
-    const user = await Users.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+    const habits = await Habits.find({ username });
+    if (!habits || habits.length === 0) {
+      return res.status(404).json({ msg: "User Not Found" });
     }
-    if (Array.isArray(user.habits) && user.habits.includes(habit_id)) {
-      const habit = await Habits.findOne({ habit_id });
-
-      if (!habit) {
-        return res.status(404).json({ msg: "Habit not found" });
-      }
-      res.status(200).json({ habit: habit });
-    } else {
-      res.status(404).json({ msg: "Habit not found for this user" });
-    }
+    res.status(200).json({ habits });
   } catch (err) {
     res.status(500).json({ msg: "error" });
   }
 };
-
 exports.postHabit = async (req: any, res: any) => {
   const habit = new Habits({
     date: req.body.date,
@@ -47,6 +38,7 @@ exports.postHabit = async (req: any, res: any) => {
     description: req.body.description,
     occurrence: req.body.occurrence,
     habit_id: new mongoose.Types.ObjectId(),
+    username: req.body.username,
   });
   try {
     const newHabit = await habit.save();

@@ -5,7 +5,8 @@
     "habit_name": "Morning Run",
     "habit_category": "Fitness",
     "description": "Go for a 30-minute run every morning.",
-    "occurrence": ["Monday", "Wednesday", "Friday"]
+    "occurrence": ["Monday", "Wednesday", "Friday"],
+    "username": "user1"
   },
   {
     "habit_id": "h2",
@@ -13,7 +14,8 @@
     "habit_name": "Read a Book",
     "habit_category": "Reading",
     "description": "Read at least one chapter of a book every evening.",
-    "occurrence": ["Tuesday", "Thursday", "Saturday"]
+    "occurrence": ["Tuesday", "Thursday", "Saturday"],
+    "username": "user2"
   },
   {
     "habit_id": "h3",
@@ -21,7 +23,8 @@
     "habit_name": "Meditation",
     "habit_category": "Mindfulness",
     "description": "Meditate for 10 minutes daily in the morning.",
-    "occurrence": ["Daily"]
+    "occurrence": ["Daily"],
+    "username": "user3"
   },
   {
     "habit_id": "h4",
@@ -29,7 +32,8 @@
     "habit_name": "Learn Coding",
     "habit_category": "Coding",
     "description": "Spend at least 1 hour learning coding every evening.",
-    "occurrence": ["Monday", "Wednesday", "Friday"]
+    "occurrence": ["Monday", "Wednesday", "Friday"],
+    "username": "user4"
   },
   {
     "habit_id": "h5",
@@ -37,7 +41,8 @@
     "habit_name": "Healthy Eating",
     "habit_category": "Health",
     "description": "Eat a balanced and healthy meal every day.",
-    "occurrence": ["Daily"]
+    "occurrence": ["Daily"],
+    "username": "user5"
   },
   {
     "habit_id": "h6",
@@ -45,7 +50,8 @@
     "habit_name": "Yoga",
     "habit_category": "Fitness",
     "description": "Practice yoga for 20 minutes every morning.",
-    "occurrence": ["Tuesday", "Thursday", "Saturday"]
+    "occurrence": ["Tuesday", "Thursday", "Saturday"],
+    "username": "user6"
   },
   {
     "habit_id": "h7",
@@ -53,7 +59,8 @@
     "habit_name": "Writing Journal",
     "habit_category": "Writing",
     "description": "Write in your journal for 15 minutes every evening.",
-    "occurrence": ["Daily"]
+    "occurrence": ["Daily"],
+    "username": "user7"
   },
   {
     "habit_id": "h8",
@@ -61,7 +68,8 @@
     "habit_name": "Cooking",
     "habit_category": "Cooking",
     "description": "Cook a new recipe every Sunday.",
-    "occurrence": ["Sunday"]
+    "occurrence": ["Sunday"],
+    "username": "user8"
   },
   {
     "habit_id": "h9",
@@ -69,7 +77,8 @@
     "habit_name": "Productivity",
     "habit_category": "Productivity",
     "description": "Complete your daily tasks on time.",
-    "occurrence": ["Daily"]
+    "occurrence": ["Daily"],
+    "username": "user9"
   },
   {
     "habit_id": "h10",
@@ -77,6 +86,7 @@
     "habit_name": "Learn a Language",
     "habit_category": "Learning",
     "description": "Spend 30 minutes learning a new language every day.",
-    "occurrence": ["Daily"]
+    "occurrence": ["Daily"],
+    "username": "user10"
   }
 ]

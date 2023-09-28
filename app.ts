@@ -87,9 +87,9 @@ router.get("/api/categories/:username", getCategories);
 
 router.post("/api/categories/:username", postCategory);
 
-router.get("/api/users/:username/habits", getAllHabits);
+router.get("/api/habits/users", getAllHabits);
 
-router.get("/api/users/:username/habits/:habit_id", getHabit);
+router.get("/api/habits/:username", getHabit);
 
 router.post("/api/users/:username/habits", postHabit);
 

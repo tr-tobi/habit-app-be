@@ -5,7 +5,7 @@
     "password": "password1",
     "habit_categories": ["Health", "Fitness", "Productivity"],
     "challenges": ["30-Day Workout Challenge", "Read a Book a Week Challenge"],
-    "habits": ["h1", "h3"],
+    "habits": ["h1"],
     "notes": []
   },
   {
@@ -14,7 +14,7 @@
     "password": "password2",
     "habit_categories": ["Mindfulness", "Coding", "Cooking"],
     "challenges": ["Daily Meditation Challenge"],
-    "habits": ["h2", "h4"],
+    "habits": ["h2", "h33"],
     "notes": []
   },
   {
@@ -23,7 +23,7 @@
     "password": "password3",
     "habit_categories": ["Reading", "Writing", "Exercise"],
     "challenges": [],
-    "habits": ["h5", "h6"],
+    "habits": ["h3", "h34"],
     "notes": []
   },
   {
@@ -32,7 +32,7 @@
     "password": "password4",
     "habit_categories": ["Coding", "Health", "Yoga"],
     "challenges": ["Daily Coding Challenge", "Weekly Yoga Challenge"],
-    "habits": ["h7", "h8"],
+    "habits": ["h4", "h35"],
     "notes": []
   },
   {
@@ -41,7 +41,7 @@
     "password": "password5",
     "habit_categories": ["Productivity", "Mindfulness"],
     "challenges": ["30-Day Productivity Challenge"],
-    "habits": ["h9"],
+    "habits": ["h5"],
     "notes": []
   },
   {
@@ -50,7 +50,7 @@
     "password": "password6",
     "habit_categories": ["Cooking", "Fitness", "Reading"],
     "challenges": [],
-    "habits": ["h10"],
+    "habits": ["h6"],
     "notes": []
   },
   {
@@ -59,7 +59,7 @@
     "password": "password7",
     "habit_categories": ["Exercise", "Writing", "Coding"],
     "challenges": [],
-    "habits": [],
+    "habits": ["h7"],
     "notes": []
   },
   {
@@ -68,7 +68,7 @@
     "password": "password8",
     "habit_categories": ["Health", "Mindfulness", "Cooking"],
     "challenges": [],
-    "habits": [],
+    "habits": ["h8"],
     "notes": []
   },
   {
@@ -77,7 +77,7 @@
     "password": "password9",
     "habit_categories": ["Productivity", "Reading"],
     "challenges": ["Weekly Reading Challenge"],
-    "habits": [],
+    "habits": ["h9"],
     "notes": []
   },
   {
@@ -86,7 +86,7 @@
     "password": "password10",
     "habit_categories": ["Fitness", "Exercise"],
     "challenges": ["Daily Workout Challenge"],
-    "habits": [],
+    "habits": ["h10"],
     "notes": []
   },
   {
