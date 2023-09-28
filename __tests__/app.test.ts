@@ -416,10 +416,10 @@ describe("/api/categories/:username", () => {
   });
 });
 
-describe("/api/users/:username/habits", () => {
+describe("/api/habits/users", () => {
   test("GET:200 sends an array of habit objects each habit should have the specified properties", () => {
     return request(app)
-      .get("/api/users/user1/habits")
+      .get("/api/habits/users")
       .expect(200)
       .then((res: any) => {
         expect(res.body.habits).toEqual(expect.any(Array));
@@ -430,46 +430,9 @@ describe("/api/users/:username/habits", () => {
         expect(res.body.habits[0]).toHaveProperty("occurrence");
       });
   });
-
-  test("POST:201 inserts a new habit to the db and sends the new habit to the client", () => {
-    const newHabit: object = {
-      habit_name: "Paint",
-      habit_category: "Mindfulness",
-      description: "Paint every evening.",
-      occurrence: ["Daily"],
-      username: "user11",
-    };
-    return request(app)
-      .post("/api/users/user1/habits")
-      .send(newHabit)
-      .expect(201)
-      .then((res: any) => {
-        expect(res.body.habit).toHaveProperty("date");
-        expect(res.body.habit).toHaveProperty("habit_name");
-        expect(res.body.habit).toHaveProperty("habit_category");
-        expect(res.body.habit).toHaveProperty("description");
-        expect(res.body.habit).toHaveProperty("occurrence");
-        expect(res.body.habit).toHaveProperty("habit_id");
-        expect(res.body.habit).toHaveProperty("username");
-      });
-  });
-
-  test("POST:400 sends an appropriate error message when given a bad habit (missing properties: habit_name and occurence )", () => {
-    const newHabit: object = {
-      habit_category: "Mindfulness",
-      description: "Nap every evening.",
-    };
-    return request(app)
-      .post("/api/users/user1/habits")
-      .send(newHabit)
-      .expect(400)
-      .then((res: any) => {
-        expect(res.body.msg).toBe("Bad Request");
-      });
-  });
 });
 describe("/api/habits/:username", () => {
-  test("GET: sends a habit for a user", () => {
+  test("GET: serves an array of a specific users' habits", () => {
     return request(app)
       .get("/api/habits/user5")
       .expect(200)
@@ -493,6 +456,41 @@ describe("/api/habits/:username", () => {
       .expect(404)
       .then((response: any) => {
         expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+  test("POST:201 inserts a new habit to the db and sends the new habit to the client", () => {
+    const newHabit: object = {
+      habit_name: "Paint",
+      habit_category: "Mindfulness",
+      description: "Paint every evening.",
+      occurrence: ["Daily"],
+      username: "user11",
+    };
+    return request(app)
+      .post("/api/users/user12/habits")
+      .send(newHabit)
+      .expect(201)
+      .then((res: any) => {
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit).toHaveProperty("habit_name");
+        expect(res.body.habit).toHaveProperty("habit_category");
+        expect(res.body.habit).toHaveProperty("description");
+        expect(res.body.habit).toHaveProperty("occurrence");
+        expect(res.body.habit).toHaveProperty("habit_id");
+        expect(res.body.habit).toHaveProperty("username");
+      });
+  });
+  test("POST:400 sends an appropriate error message when given a bad habit (missing properties: habit_name and occurence )", () => {
+    const newHabit: object = {
+      habit_category: "Mindfulness",
+      description: "Nap every evening.",
+    };
+    return request(app)
+      .post("/api/users/user12/habits")
+      .send(newHabit)
+      .expect(400)
+      .then((res: any) => {
+        expect(res.body.msg).toBe("Bad Request");
       });
   });
 });
