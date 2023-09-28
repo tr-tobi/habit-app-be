@@ -173,7 +173,7 @@
       "categories": ["Fitness", "Exercise", "testCategory"]
     }
   },
-  "GET /api/users/:username/habits": {
+  "GET /api/users/habits": {
     "description": "serves an array of user habits",
     "queries": [],
     "exampleResponse": {
@@ -217,20 +217,24 @@
       ]
     }
   },
-  "GET /api/users/:username/habits/:habit_id": {
-    "description": "serves an array of user habits",
+  "GET /api/habits/:username": {
+    "description": "serves an array of a specific users' habits",
     "queries": [],
     "exampleResponse": {
-      "habit": 
+      "habits": 
+      [
         {
-          "_id": "h1",
-          "date": "2023-09-19",
-          "habit_name": "Morning Run",
-          "habit_category": "Fitness",
-          "description": "Go for a 30-minute run every morning.",
-          "occurrence": ["Monday", "Wednesday", "Friday"],
-          "habit_id": "h4"
+          "_id": "new ObjectId(651552beef3dc783dc1583d6)",
+          "date": "2023-09-23T00:00:00.000Z",
+          "habit_name": "Healthy Eating",
+          "habit_category": "Health",
+          "description": "Eat a balanced and healthy meal every day.",
+          "occurrence": "[ Daily ]",
+          "habit_id": "h5",
+          "username": "user5",
+          "__v": 0
         }
+      ]
     }
   },
   "PATCH /api/users/:username/habits/:habit_id": {

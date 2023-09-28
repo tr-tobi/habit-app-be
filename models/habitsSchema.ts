@@ -31,6 +31,10 @@ var habitsSchema = new mongoose.Schema({
     type: Schema.Types.Mixed,
     default: mongoose.Types.ObjectId,
   },
+  username: {
+    type: String,
+    required: true,
+  }
 });
 
 module.exports = habitsSchema;
