@@ -434,6 +434,19 @@ describe("/api/habits/users", () => {
 describe("/api/habits/:username", () => {
   test("GET: serves an array of a specific users' habits", () => {
     return request(app)
+      .get("/api/users/user2/habits/h4")
+      .expect(200)
+      .then((res: any) => {
+        expect(res.body.habit).toHaveProperty("habit_id");
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit).toHaveProperty("habit_name");
+        expect(res.body.habit).toHaveProperty("habit_category");
+        expect(res.body.habit).toHaveProperty("description");
+        expect(res.body.habit).toHaveProperty("occurrence");
+      });
+  });
+  test("GET: sends a habit for a user", () => {
+    return request(app)
       .get("/api/habits/user5")
       .expect(200)
       .then((res: any) => {

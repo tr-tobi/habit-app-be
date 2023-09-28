@@ -4,9 +4,16 @@ var router = express.Router();
 
 var habitsSchema = require("../models/habitsSchema");
 var usersSchema = require("../models/usersSchema");
+var completionSchema = require("../models/habit-completion");
 
 var Habits = mongoose.model("Habits", habitsSchema);
 var Users = mongoose.model("Users", usersSchema);
+var Completion = mongoose.model(
+  "habit_completion",
+  completionSchema,
+  "habit_completion"
+);
+
 exports.getAllHabits = async (req: any, res: any) => {
   try {
     const habits = await Habits.find(); 
@@ -70,12 +77,13 @@ exports.patchHabit = async (req: any, res: any) => {
 };
 
 exports.deleteHabit = async (req: any, res: any) => {
-  const habitId = req.params.habit_id;
+  const habitId = new mongoose.Types.ObjectId(req.params.habit_id);
   const existingHabit = await Habits.find({ habit_id: habitId });
 
   if (existingHabit.length != 0) {
     try {
       await Habits.deleteOne({ habit_id: habitId });
+      await Completion.deleteMany({ habit_id: habitId });
       res.status(204).json();
     } catch (err: any) {
       res.status(400).json({ msg: "Bad Request" });
