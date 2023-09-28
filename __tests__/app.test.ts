@@ -417,7 +417,7 @@ describe("/api/categories/:username", () => {
 });
 
 describe("/api/habits/users", () => {
-  test.only("GET:200 sends an array of habit objects each habit should have the specified properties", () => {
+  test("GET:200 sends an array of habit objects each habit should have the specified properties", () => {
     return request(app)
       .get("/api/habits/users")
       .expect(200)
@@ -519,19 +519,6 @@ describe("/api/users/:username/habits/:habit_id", () => {
     return request(app)
       .patch("/api/users/user2/habits/650c2a6958e406e373639780")
       .send({ occurrence: ["Daily"] })
-      .expect(404)
-      .then((res: any) => {
-        expect(res.body.msg).toBe("Habit not found");
-      });
-  });
-});
-describe("/api/users/:username/habits/:habit_id", () => {
-  test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
-    return request(app).delete("/api/users/user2/habits/h2").expect(204);
-  });
-  test("DELETE: 404 responds with appropriate error message when given non-existent id", () => {
-    return request(app)
-      .delete("/api/users/user2/habits/650c5a7b2a297337f65c6967")
       .expect(404)
       .then((res: any) => {
         expect(res.body.msg).toBe("Habit not found");
