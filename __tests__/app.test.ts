@@ -471,6 +471,17 @@ describe("/api/users/:username/habits", () => {
 describe("/api/habits/:username", () => {
   test("GET: sends a habit for a user", () => {
     return request(app)
+      .get("/api/users/user2/habits/h4")
+      .expect(200)
+      .then((res: any) => {
+        expect(res.body.habit).toHaveProperty("habit_id");
+        expect(res.body.habit).toHaveProperty("date");
+        expect(res.body.habit).toHaveProperty("habit_name");
+        expect(res.body.habit).toHaveProperty("habit_category");
+        expect(res.body.habit).toHaveProperty("description");
+        expect(res.body.habit).toHaveProperty("occurrence");
+      });
+  });
       .get("/api/habits/user5")
       .expect(200)
       .then((res: any) => {
@@ -527,7 +538,7 @@ describe("/api/users/:username/habits/:habit_id", () => {
       });
   });
 });
-describe("/api/users/:username/habits/:habit_id", () => {
+describe.only("/api/users/:username/habits/:habit_id", () => {
   test("DELETE: 204 deletes the given habit by_id and sends no body back", () => {
     return request(app).delete("/api/users/user2/habits/h2").expect(204);
   });

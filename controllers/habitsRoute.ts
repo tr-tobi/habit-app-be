@@ -84,7 +84,7 @@ exports.patchHabit = async (req: any, res: any) => {
 };
 
 exports.deleteHabit = async (req: any, res: any) => {
-  const habitId = req.params.habit_id;
+  const habitId = new mongoose.Types.ObjectId(req.params.habit_id);
   const existingHabit = await Habits.find({ habit_id: habitId });
 
   if (existingHabit.length != 0) {
