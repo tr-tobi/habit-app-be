@@ -16,7 +16,7 @@ var Completion = mongoose.model(
 
 exports.getAllHabits = async (req: any, res: any) => {
   try {
-    const habits = await Habits.find(); 
+    const habits = await Habits.find();
     if (!habits || habits.length === 0) {
       return res.status(404).json({ msg: "Habits Not Found" });
     }
@@ -83,7 +83,7 @@ exports.deleteHabit = async (req: any, res: any) => {
   if (existingHabit.length != 0) {
     try {
       await Habits.deleteOne({ habit_id: habitId });
-      await Completion.deleteMany({ habit_id: habitId });
+      await Completion.deleteMany({ habit_id: habitId.toString() });
       res.status(204).json();
     } catch (err: any) {
       res.status(400).json({ msg: "Bad Request" });
