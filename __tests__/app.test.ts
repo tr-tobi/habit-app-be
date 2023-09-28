@@ -437,6 +437,7 @@ describe("/api/users/:username/habits", () => {
       habit_category: "Mindfulness",
       description: "Paint every evening.",
       occurrence: ["Daily"],
+      username: "user11",
     };
     return request(app)
       .post("/api/users/user1/habits")
@@ -449,6 +450,7 @@ describe("/api/users/:username/habits", () => {
         expect(res.body.habit).toHaveProperty("description");
         expect(res.body.habit).toHaveProperty("occurrence");
         expect(res.body.habit).toHaveProperty("habit_id");
+        expect(res.body.habit).toHaveProperty("username");
       });
   });
 
@@ -466,21 +468,35 @@ describe("/api/users/:username/habits", () => {
       });
   });
 });
-
-describe("/api/users/:username/habits/:habit_id", () => {
+describe("/api/habits/:username", () => {
   test("GET: sends a habit for a user", () => {
     return request(app)
-    .get("/api/users/user2/habits/h4")
-    .expect(200)
-    .then((res:any) => {
-      expect(res.body.habit).toHaveProperty("habit_id");
-      expect(res.body.habit).toHaveProperty("date");
-      expect(res.body.habit).toHaveProperty("habit_name");
-      expect(res.body.habit).toHaveProperty("habit_category");
-      expect(res.body.habit).toHaveProperty("description");
-      expect(res.body.habit).toHaveProperty("occurrence");
-    })
-  })
+      .get("/api/habits/user5")
+      .expect(200)
+      .then((res: any) => {
+        const { habits } = res.body;
+        expect(habits).toBeInstanceOf(Array);
+        habits.forEach((habit: any) => {
+          expect(habit).toHaveProperty("habit_id");
+          expect(habit).toHaveProperty("date");
+          expect(habit).toHaveProperty("habit_name");
+          expect(habit).toHaveProperty("habit_category");
+          expect(habit).toHaveProperty("description");
+          expect(habit).toHaveProperty("occurrence");
+          expect(habit).toHaveProperty("username");
+        });
+      });
+  });
+  test("GET:404 sends a not found message for non-existant username", () => {
+    return request(app)
+      .get("/api/habits/banana")
+      .expect(404)
+      .then((response: any) => {
+        expect(response.body.msg).toEqual("User Not Found");
+      });
+  });
+});
+describe("/api/users/:username/habits/:habit_id", () => {
   test("PATCH:201 updates a habit by id", () => {
     const newHabit: object = {
       habit_name: "Sleep",
